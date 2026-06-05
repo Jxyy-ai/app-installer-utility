@@ -237,10 +237,3 @@ function Install-Applications {
     Add-InstallLog -Message "Installation batch complete: $successCount successful, $failureCount failed" -Level 'INFO'
     Update-AppState -Property 'IsInstalling' -Value $false
 }
-
-export-ModuleMember -Function @(
-    'Install-Application',
-    'Install-Applications',
-    'Install-WinGet',
-    'Install-Chocolatey'
-)
