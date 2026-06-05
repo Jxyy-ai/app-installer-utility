@@ -1,0 +1,253 @@
+<Window
+    x:Class="AppInstallerUtility.MainWindow"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    Title="App Installer Utility"
+    WindowStartupLocation="CenterScreen"
+    Width="1000"
+    Height="700"
+    Background="#F5F5F5"
+    Foreground="#333333"
+    FontFamily="Segoe UI">
+    
+    <Grid>
+        <!-- Main content grid -->
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="150" />
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
+
+        <!-- Sidebar Navigation -->
+        <StackPanel Grid.Column="0" Background="#ECECEC" Padding="0">
+            <Button
+                x:Name="NavInstallBtn"
+                Content="Install"
+                Padding="15,12"
+                Background="#ECECEC"
+                BorderThickness="0"
+                Foreground="#333333"
+                HorizontalAlignment="Stretch"
+                HorizontalContentAlignment="Left"
+                Tag="install" />
+            <Button
+                x:Name="NavTweaksBtn"
+                Content="Tweaks"
+                Padding="15,12"
+                Background="#ECECEC"
+                BorderThickness="0"
+                Foreground="#333333"
+                HorizontalAlignment="Stretch"
+                HorizontalContentAlignment="Left"
+                Tag="tweaks" />
+            <Button
+                x:Name="NavConfigBtn"
+                Content="Config"
+                Padding="15,12"
+                Background="#ECECEC"
+                BorderThickness="0"
+                Foreground="#333333"
+                HorizontalAlignment="Stretch"
+                HorizontalContentAlignment="Left"
+                Tag="config" />
+            <Button
+                x:Name="NavAboutBtn"
+                Content="About"
+                Padding="15,12"
+                Background="#ECECEC"
+                BorderThickness="0"
+                Foreground="#333333"
+                HorizontalAlignment="Stretch"
+                HorizontalContentAlignment="Left"
+                Tag="about" />
+        </StackPanel>
+
+        <!-- Main Content Area -->
+        <Grid Grid.Column="1">
+            <!-- Install Tab -->
+            <Grid x:Name="InstallPanel" Background="#FFFFFF" Visibility="Visible">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="60" />
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="80" />
+                </Grid.RowDefinitions>
+
+                <!-- Search Bar -->
+                <Grid Grid.Row="0" Background="#F0F0F0" Padding="15">
+                    <TextBox
+                        x:Name="SearchBox"
+                        PlaceholderText="Search apps..."
+                        FontSize="14"
+                        Padding="10"
+                        Background="#FFFFFF"
+                        Foreground="#333333"
+                        BorderThickness="1"
+                        BorderBrush="#CCCCCC"
+                        Margin="0" />
+                </Grid>
+
+                <!-- App Tiles Grid -->
+                <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto">
+                    <ItemsControl
+                        x:Name="AppGrid"
+                        Padding="15"
+                        Background="#FFFFFF">
+                        <ItemsControl.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <WrapPanel Orientation="Horizontal" />
+                            </ItemsPanelTemplate>
+                        </ItemsControl.ItemsPanel>
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <!-- App Tile -->
+                                <Grid
+                                    Width="120"
+                                    Height="140"
+                                    Margin="10"
+                                    Background="#F9F9F9"
+                                    BorderThickness="1"
+                                    BorderBrush="#E0E0E0">
+                                    <StackPanel Padding="10" VerticalAlignment="Center" HorizontalAlignment="Center">
+                                        <!-- Checkbox -->
+                                        <CheckBox
+                                            x:Name="AppCheckbox"
+                                            HorizontalAlignment="Center"
+                                            Margin="0 0 0 8" />
+                                        <!-- App Name -->
+                                        <TextBlock
+                                            Text="{Binding name}"
+                                            FontWeight="Bold"
+                                            FontSize="11"
+                                            TextAlignment="Center"
+                                            TextWrapping="Wrap"
+                                            Foreground="#333333"
+                                            Margin="0 0 0 4" />
+                                    </StackPanel>
+                                </Grid>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                </ScrollViewer>
+
+                <!-- Action Bar -->
+                <Grid Grid.Row="2" Background="#ECECEC" Padding="15">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                    </Grid.RowDefinitions>
+                    <StackPanel Grid.Row="0" Orientation="Horizontal" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="0 0 0 10">
+                        <TextBlock Text="Package Manager: " VerticalAlignment="Center" Foreground="#666666" Margin="0 0 10 0" FontSize="12" />
+                        <RadioButton
+                            x:Name="PMWinget"
+                            Content="WinGet"
+                            GroupName="PackageManager"
+                            Margin="0 0 15 0"
+                            VerticalAlignment="Center"
+                            Foreground="#333333" />
+                        <RadioButton
+                            x:Name="PMChocolatey"
+                            Content="Chocolatey"
+                            GroupName="PackageManager"
+                            VerticalAlignment="Center"
+                            Foreground="#333333" />
+                    </StackPanel>
+                    <Button
+                        x:Name="InstallButton"
+                        Grid.Row="1"
+                        Content="Install / Upgrade Applications"
+                        HorizontalAlignment="Right"
+                        Background="#007ACC"
+                        Foreground="#FFFFFF"
+                        Padding="15 10"
+                        FontWeight="Bold"
+                        FontSize="12" />
+                </Grid>
+            </Grid>
+
+            <!-- Tweaks Panel (placeholder) -->
+            <Grid x:Name="TweaksPanel" Background="#FFFFFF" Visibility="Collapsed">
+                <TextBlock
+                    Text="Tweaks Panel (Reserved for future system optimizations)"
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Center"
+                    Foreground="#999999"
+                    FontSize="14" />
+            </Grid>
+
+            <!-- Config Panel -->
+            <Grid x:Name="ConfigPanel" Background="#FFFFFF" Visibility="Collapsed" Padding="20">
+                <StackPanel VerticalAlignment="Top">
+                    <TextBlock Text="Configuration" FontSize="18" FontWeight="Bold" Margin="0 0 0 20" Foreground="#333333" />
+                    <TextBlock Text="Preferred Package Manager" FontSize="12" FontWeight="Bold" Margin="0 0 0 10" Foreground="#666666" />
+                    <RadioButton
+                        x:Name="ConfigPMWinget"
+                        Content="WinGet (default)"
+                        GroupName="ConfigPM"
+                        Margin="0 0 0 10"
+                        Foreground="#333333" />
+                    <RadioButton
+                        x:Name="ConfigPMChocolatey"
+                        Content="Chocolatey"
+                        GroupName="ConfigPM"
+                        Margin="0 0 0 20"
+                        Foreground="#333333" />
+                    <TextBlock Text="Package Manager Status" FontSize="12" FontWeight="Bold" Margin="0 0 0 10" Foreground="#666666" />
+                    <TextBlock x:Name="PMStatusText" Foreground="#333333" Margin="0 0 0 20" Text="Checking..." />
+                    <Button
+                        Content="Save Preferences"
+                        Background="#107C10"
+                        Foreground="#FFFFFF"
+                        Padding="12 8"
+                        x:Name="SaveConfigBtn" />
+                </StackPanel>
+            </Grid>
+
+            <!-- About Panel -->
+            <Grid x:Name="AboutPanel" Background="#FFFFFF" Visibility="Collapsed" Padding="20">
+                <StackPanel VerticalAlignment="Top">
+                    <TextBlock Text="App Installer Utility" FontSize="20" FontWeight="Bold" Foreground="#333333" Margin="0 0 0 10" />
+                    <TextBlock Text="Version: 1.0" FontSize="12" Foreground="#666666" Margin="0 0 0 5" />
+                    <TextBlock Text="Built with PowerShell 7.5, WPF, and WinGet 1.28.240" FontSize="12" Foreground="#666666" Margin="0 0 0 15" />
+                    <TextBlock Text="Features:" FontSize="12" FontWeight="Bold" Foreground="#333333" Margin="0 0 0 10" />
+                    <ItemsControl Margin="0 0 0 10" Foreground="#333333" FontSize="11">
+                        <TextBlock Text="• Curated app catalog with 48+ applications" Margin="0 3" />
+                        <TextBlock Text="• Batch install and single-app one-click install" Margin="0 3" />
+                        <TextBlock Text="• Silent package manager execution" Margin="0 3" />
+                        <TextBlock Text="• Auto-bootstrap WinGet and Chocolatey" Margin="0 3" />
+                        <TextBlock Text="• Real-time search and filter" Margin="0 3" />
+                        <TextBlock Text="• Offline mode support" Margin="0 3" />
+                        <TextBlock Text="• Headless JSON config mode" Margin="0 3" />
+                    </ItemsControl>
+                    <TextBlock Text="Admin elevation required on launch." FontSize="11" Foreground="#999999" Margin="0 10 0 0" />
+                </StackPanel>
+            </Grid>
+        </Grid>
+
+        <!-- Busy Overlay -->
+        <Grid
+            x:Name="BusyOverlay"
+            Background="#00000080"
+            Visibility="Collapsed"
+            Panel.ZIndex="1000">
+            <StackPanel
+                VerticalAlignment="Center"
+                HorizontalAlignment="Center"
+                Background="#FFFFFF"
+                Padding="30"
+                CornerRadius="8">
+                <ProgressBar
+                    Width="200"
+                    Height="4"
+                    IsIndeterminate="True"
+                    Background="#E0E0E0"
+                    Foreground="#007ACC"
+                    Margin="0 0 0 15" />
+                <TextBlock
+                    x:Name="BusyText"
+                    Text="Installing applications..."
+                    HorizontalAlignment="Center"
+                    Foreground="#333333"
+                    FontSize="14" />
+            </StackPanel>
+        </Grid>
+    </Grid>
+</Window>
