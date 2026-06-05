@@ -1,0 +1,359 @@
+{
+  "metadata": {
+    "version": "1.0",
+    "lastUpdated": "2026-06-05",
+    "totalApps": 48
+  },
+  "categories": [
+    {
+      "id": "development",
+      "name": "Development",
+      "icon": "🔧",
+      "apps": [
+        {
+          "packageId": "Microsoft.VisualStudioCode",
+          "name": "Visual Studio Code",
+          "description": "Lightweight code editor with extensions",
+          "wingetId": "Microsoft.VisualStudioCode",
+          "chocoId": "vscode"
+        },
+        {
+          "packageId": "Git.Git",
+          "name": "Git",
+          "description": "Distributed version control system",
+          "wingetId": "Git.Git",
+          "chocoId": "git"
+        },
+        {
+          "packageId": "JetBrains.IntelliJIDEA.Community",
+          "name": "IntelliJ IDEA Community",
+          "description": "Java IDE with advanced code analysis",
+          "wingetId": "JetBrains.IntelliJIDEA.Community",
+          "chocoId": "intellijidea-community"
+        },
+        {
+          "packageId": "Python.Python.3.12",
+          "name": "Python 3.12",
+          "description": "Python programming language runtime",
+          "wingetId": "Python.Python.3.12",
+          "chocoId": "python"
+        },
+        {
+          "packageId": "OpenJS.NodeJS.LTS",
+          "name": "Node.js LTS",
+          "description": "JavaScript runtime with npm package manager",
+          "wingetId": "OpenJS.NodeJS.LTS",
+          "chocoId": "nodejs-lts"
+        },
+        {
+          "packageId": "Docker.DockerDesktop",
+          "name": "Docker Desktop",
+          "description": "Container platform for development",
+          "wingetId": "Docker.DockerDesktop",
+          "chocoId": "docker-desktop"
+        },
+        {
+          "packageId": "HashiCorp.Terraform",
+          "name": "Terraform",
+          "description": "Infrastructure as code tool",
+          "wingetId": "HashiCorp.Terraform",
+          "chocoId": "terraform"
+        },
+        {
+          "packageId": "GitHub.CLI",
+          "name": "GitHub CLI",
+          "description": "GitHub command-line tool",
+          "wingetId": "GitHub.cli",
+          "chocoId": "gh"
+        }
+      ]
+    },
+    {
+      "id": "browsers",
+      "name": "Browsers",
+      "icon": "🌐",
+      "apps": [
+        {
+          "packageId": "Google.Chrome",
+          "name": "Google Chrome",
+          "description": "Fast and secure web browser",
+          "wingetId": "Google.Chrome",
+          "chocoId": "googlechrome"
+        },
+        {
+          "packageId": "Mozilla.Firefox",
+          "name": "Firefox",
+          "description": "Open-source web browser",
+          "wingetId": "Mozilla.Firefox",
+          "chocoId": "firefox"
+        },
+        {
+          "packageId": "Microsoft.Edge",
+          "name": "Microsoft Edge",
+          "description": "Chromium-based browser with Copilot integration",
+          "wingetId": "Microsoft.Edge",
+          "chocoId": "microsoft-edge"
+        },
+        {
+          "packageId": "Opera.Opera",
+          "name": "Opera",
+          "description": "Browser with built-in VPN and ad blocker",
+          "wingetId": "Opera.Opera",
+          "chocoId": "opera"
+        }
+      ]
+    },
+    {
+      "id": "productivity",
+      "name": "Productivity",
+      "icon": "📊",
+      "apps": [
+        {
+          "packageId": "Microsoft.Office",
+          "name": "Microsoft Office 365",
+          "description": "Complete office productivity suite",
+          "wingetId": "Microsoft.Office",
+          "chocoId": "microsoft-office-deployment-tool"
+        },
+        {
+          "packageId": "LibreOffice.LibreOffice",
+          "name": "LibreOffice",
+          "description": "Free and open-source office suite",
+          "wingetId": "LibreOffice.LibreOffice",
+          "chocoId": "libreoffice-fresh"
+        },
+        {
+          "packageId": "Obsidian.Obsidian",
+          "name": "Obsidian",
+          "description": "Personal knowledge management system",
+          "wingetId": "Obsidian.Obsidian",
+          "chocoId": "obsidian"
+        },
+        {
+          "packageId": "Notion.Notion",
+          "name": "Notion",
+          "description": "All-in-one workspace for notes and projects",
+          "wingetId": "Notion.Notion",
+          "chocoId": "notion"
+        },
+        {
+          "packageId": "StandardNotes.StandardNotes",
+          "name": "Standard Notes",
+          "description": "Encrypted note-taking application",
+          "wingetId": "StandardNotes.StandardNotes",
+          "chocoId": "standardnotes"
+        }
+      ]
+    },
+    {
+      "id": "media",
+      "name": "Media & Design",
+      "icon": "🎬",
+      "apps": [
+        {
+          "packageId": "OBSProject.OBS.Studio",
+          "name": "OBS Studio",
+          "description": "Open-source streaming and recording software",
+          "wingetId": "OBSProject.OBSStudio",
+          "chocoId": "obs-studio"
+        },
+        {
+          "packageId": "Blackmagic.DaVinciResolve",
+          "name": "DaVinci Resolve",
+          "description": "Professional video editing and color correction",
+          "wingetId": "Blackmagic.DaVinciResolve",
+          "chocoId": "davinci-resolve"
+        },
+        {
+          "packageId": "Audacity.Audacity",
+          "name": "Audacity",
+          "description": "Free audio editing software",
+          "wingetId": "Audacity.Audacity",
+          "chocoId": "audacity"
+        },
+        {
+          "packageId": "ImageMagick.ImageMagick",
+          "name": "ImageMagick",
+          "description": "Command-line image processing tool",
+          "wingetId": "ImageMagick.ImageMagick",
+          "chocoId": "imagemagick"
+        },
+        {
+          "packageId": "GIMP.GIMP",
+          "name": "GIMP",
+          "description": "Free image editor similar to Photoshop",
+          "wingetId": "GIMP.GIMP",
+          "chocoId": "gimp"
+        }
+      ]
+    },
+    {
+      "id": "tools",
+      "name": "System Tools",
+      "icon": "🔨",
+      "apps": [
+        {
+          "packageId": "7zip.7zip",
+          "name": "7-Zip",
+          "description": "Free file archiver with high compression",
+          "wingetId": "7zip.7zip",
+          "chocoId": "7zip"
+        },
+        {
+          "packageId": "RARLab.WinRAR",
+          "name": "WinRAR",
+          "description": "Powerful file archiver and extractor",
+          "wingetId": "RARLab.WinRAR",
+          "chocoId": "winrar"
+        },
+        {
+          "packageId": "Ghisler.TotalCommander",
+          "name": "Total Commander",
+          "description": "Advanced file manager",
+          "wingetId": "Ghisler.TotalCommander",
+          "chocoId": "totalcommander"
+        },
+        {
+          "packageId": "Microsoft.Sysinternals.Suite",
+          "name": "Sysinternals Suite",
+          "description": "Advanced Windows system utilities",
+          "wingetId": "Microsoft.Sysinternals.Suite",
+          "chocoId": "sysinternals"
+        },
+        {
+          "packageId": "Piriform.CCleaner",
+          "name": "CCleaner",
+          "description": "System cleanup and optimization tool",
+          "wingetId": "Piriform.CCleaner",
+          "chocoId": "ccleaner"
+        },
+        {
+          "packageId": "voidtools.Everything",
+          "name": "Everything",
+          "description": "Lightning-fast file search utility",
+          "wingetId": "voidtools.Everything",
+          "chocoId": "everything"
+        }
+      ]
+    },
+    {
+      "id": "communication",
+      "name": "Communication",
+      "icon": "💬",
+      "apps": [
+        {
+          "packageId": "Discord.Discord",
+          "name": "Discord",
+          "description": "Voice, video, and text communication platform",
+          "wingetId": "Discord.Discord",
+          "chocoId": "discord"
+        },
+        {
+          "packageId": "Slack.Slack",
+          "name": "Slack",
+          "description": "Team messaging and collaboration platform",
+          "wingetId": "Slack.Slack",
+          "chocoId": "slack"
+        },
+        {
+          "packageId": "Telegram.TelegramDesktop",
+          "name": "Telegram",
+          "description": "Secure messaging application",
+          "wingetId": "Telegram.TelegramDesktop",
+          "chocoId": "telegram"
+        },
+        {
+          "packageId": "Microsoft.Teams",
+          "name": "Microsoft Teams",
+          "description": "Enterprise communication and collaboration",
+          "wingetId": "Microsoft.Teams",
+          "chocoId": "microsoft-teams"
+        }
+      ]
+    },
+    {
+      "id": "security",
+      "name": "Security & Privacy",
+      "icon": "🔒",
+      "apps": [
+        {
+          "packageId": "Bitwarden.Bitwarden",
+          "name": "Bitwarden",
+          "description": "Open-source password manager",
+          "wingetId": "Bitwarden.Bitwarden",
+          "chocoId": "bitwarden"
+        },
+        {
+          "packageId": "AgileBits.1Password7",
+          "name": "1Password 7",
+          "description": "Commercial password manager",
+          "wingetId": "AgileBits.1Password7",
+          "chocoId": "1password"
+        },
+        {
+          "packageId": "ProtonVPN.ProtonVPN",
+          "name": "ProtonVPN",
+          "description": "VPN client for privacy",
+          "wingetId": "ProtonVPN.ProtonVPN",
+          "chocoId": "protonvpn"
+        },
+        {
+          "packageId": "IDRIX.VeraCrypt",
+          "name": "VeraCrypt",
+          "description": "Free disk encryption software",
+          "wingetId": "IDRIX.VeraCrypt",
+          "chocoId": "veracrypt"
+        },
+        {
+          "packageId": "DominikReichl.KeePass",
+          "name": "KeePass",
+          "description": "Open-source password manager",
+          "wingetId": "DominikReichl.KeePass",
+          "chocoId": "keepass"
+        }
+      ]
+    },
+    {
+      "id": "utilities",
+      "name": "Utilities",
+      "icon": "⚙️",
+      "apps": [
+        {
+          "packageId": "VideoLAN.VLC",
+          "name": "VLC Media Player",
+          "description": "Universal multimedia player",
+          "wingetId": "VideoLAN.VLC",
+          "chocoId": "vlc"
+        },
+        {
+          "packageId": "qBittorrent.qBittorrent",
+          "name": "qBittorrent",
+          "description": "Open-source torrent client",
+          "wingetId": "qBittorrent.qBittorrent",
+          "chocoId": "qbittorrent"
+        },
+        {
+          "packageId": "Greenshot.Greenshot",
+          "name": "Greenshot",
+          "description": "Screenshot and annotation tool",
+          "wingetId": "Greenshot.Greenshot",
+          "chocoId": "greenshot"
+        },
+        {
+          "packageId": "Calibre.Calibre",
+          "name": "Calibre",
+          "description": "E-book library management",
+          "wingetId": "Calibre.Calibre",
+          "chocoId": "calibre"
+        },
+        {
+          "packageId": "HandBrake.HandBrake",
+          "name": "HandBrake",
+          "description": "Video transcoder",
+          "wingetId": "HandBrake.HandBrake",
+          "chocoId": "handbrake"
+        }
+      ]
+    }
+  ]
+}
