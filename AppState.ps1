@@ -85,11 +85,3 @@ function Toggle-AppSelection {
         $global:AppState.SelectedApps += $PackageId
     }
 }
-
-export-ModuleMember -Function @(
-    'Update-AppState',
-    'Get-AppState',
-    'Add-InstallLog',
-    'Clear-SelectedApps',
-    'Toggle-AppSelection'
-)
