@@ -151,14 +151,3 @@ function Start-TranscriptLogging {
 
 Start-TranscriptLogging
 Update-PMAvailability
-
-export-ModuleMember -Function @(
-    'Get-ConfigValue',
-    'Set-ConfigValue',
-    'Get-PreferredPackageManager',
-    'Set-PreferredPackageManager',
-    'Test-WinGetAvailable',
-    'Test-ChocolateyAvailable',
-    'Get-OfflineMode',
-    'Update-PMAvailability'
-)
