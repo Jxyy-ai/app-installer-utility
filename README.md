@@ -29,7 +29,6 @@ A Windows desktop utility for one-click and batch software installation from a c
 - PM availability status display
 
 ✅ **Advanced Modes**
-- **Offline Mode**: Environment variable `OFFLINE_MODE=1` disables install tab and package manager calls
 - **Headless Mode**: Execute from JSON config without launching UI
 - **Admin Elevation**: Automatic elevation on launch
 
@@ -108,17 +107,6 @@ pwsh -ExecutionPolicy Bypass -File Main.ps1 -ConfigPath "C:\path\to\install-conf
 
 No UI is launched; installation runs silently and logs to transcript.
 
-### Offline Mode
-
-Enable offline mode to disable all package manager operations:
-
-```powershell
-$env:OFFLINE_MODE = '1'
-pwsh -ExecutionPolicy Bypass -File Main.ps1
-```
-
-The Install tab will be disabled and grayed out.
-
 ## Configuration
 
 ### INI File Format
@@ -127,12 +115,10 @@ Preferences are stored at `%LOCALAPPDATA%\AppInstallerUtility\config.ini`:
 
 ```ini
 PreferredPM=winget
-OfflineMode=false
 ```
 
 ### Environment Variables
 
-- `OFFLINE_MODE=1`: Disables install tab and package manager calls
 - `LOCALAPPDATA`: Standard Windows path for logs and config (auto-detected)
 
 ## Supported Applications (48 Total)
@@ -227,7 +213,6 @@ OfflineMode=false
                          ├─ Apps: {}         ← from Catalog
                          ├─ Selected: []     ← from UI
                          ├─ IsInstalling     ← background task
-                         ├─ OfflineMode      ← env + config
                          └─ PreferredPM      ← config.ini
                                    │
                                    ▼

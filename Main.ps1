@@ -5,13 +5,10 @@
 
 .DESCRIPTION
   Provides a curated app catalog with WPF UI, batch/single-app install, silent execution,
-  real-time search, and offline mode support. Supports headless JSON config mode.
+  and real-time search. Supports headless JSON config mode.
 
 .PARAMETER ConfigPath
   Path to JSON config file for headless mode (no UI). Must contain 'apps' array of package IDs.
-
-.PARAMETER OfflineMode
-  Disables all package manager operations and install tab.
 
 .EXAMPLE
   .\Main.ps1
@@ -28,9 +25,10 @@
 #>
 
 param(
-    [string]$ConfigPath,
-    [switch]$OfflineMode
+    [string]$ConfigPath
 )
+
+$HeadlessConfigPath = $ConfigPath
 
 $ErrorActionPreference = 'Stop'
 $PSDefaultParameterValues['*:ErrorAction'] = 'Stop'
@@ -38,7 +36,19 @@ $PSDefaultParameterValues['*:ErrorAction'] = 'Stop'
 # Ensure admin elevation
 if (-not ([Security.Principal.WindowsPrincipal][Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole([Security.Principal.WindowsBuiltInRole]::Administrator)) {
     Write-Host "[ERROR] This utility requires administrator privileges. Restarting elevated..." -ForegroundColor Red
-    Start-Process powershell -ArgumentList "-NoProfile -ExecutionPolicy Bypass -Command `"& {Set-Location '$PWD'; & '$PSCommandPath' -ConfigPath '$ConfigPath' -OfflineMode:`$$OfflineMode}`"" -Verb RunAs
+    $launchArgs = @(
+        '-NoProfile'
+        '-ExecutionPolicy'
+        'Bypass'
+        '-File'
+        "`"$PSCommandPath`""
+    )
+
+    if ($ConfigPath) {
+        $launchArgs += @('-ConfigPath', "`"$ConfigPath`"")
+    }
+
+    Start-Process pwsh -ArgumentList $launchArgs -Verb RunAs
     exit
 }
 
@@ -53,7 +63,6 @@ $global:AppState = @{
     Apps = @{}
     SelectedApps = @()
     IsInstalling = $false
-    OfflineMode = $OfflineMode -or $env:OFFLINE_MODE -eq '1'
     PreferredPM = Get-PreferredPackageManager
     InstallLog = @()
 }
@@ -61,14 +70,14 @@ $global:AppState = @{
 Write-Host "[INFO] App Installer Utility initialized" -ForegroundColor Green
 
 # Headless mode
-if ($ConfigPath) {
-    if (-not (Test-Path $ConfigPath)) {
-        Write-Host "[ERROR] Config file not found: $ConfigPath" -ForegroundColor Red
+if ($HeadlessConfigPath) {
+    if (-not (Test-Path $HeadlessConfigPath)) {
+        Write-Host "[ERROR] Config file not found: $HeadlessConfigPath" -ForegroundColor Red
         exit 1
     }
 
     try {
-        $config = Get-Content $ConfigPath | ConvertFrom-Json
+        $config = Get-Content $HeadlessConfigPath | ConvertFrom-Json
         $appsToInstall = $config.apps | Where-Object { $_ }
 
         if (-not $appsToInstall) {
@@ -78,12 +87,40 @@ if ($ConfigPath) {
 
         Write-Host "[INFO] Running headless install for $($appsToInstall.Count) app(s)" -ForegroundColor Cyan
         
-        if ($global:AppState.OfflineMode) {
-            Write-Host "[ERROR] OFFLINE_MODE enabled. Cannot install packages." -ForegroundColor Red
-            exit 1
+        $catalogPath = "$ScriptRoot\AppCatalog.json"
+        $catalogApps = @{}
+        if (Test-Path $catalogPath) {
+            $catalog = Get-Content $catalogPath | ConvertFrom-Json
+            foreach ($category in $catalog.categories) {
+                foreach ($app in $category.apps) {
+                    $catalogApps[$app.packageId] = $app
+                    $catalogApps[$app.wingetId] = $app
+                    $catalogApps[$app.chocoId] = $app
+                }
+            }
         }
 
-        Install-Applications -PackageIds $appsToInstall -PreferredPM $global:AppState.PreferredPM
+        $installSpecs = foreach ($appId in $appsToInstall) {
+            if ($catalogApps.ContainsKey($appId)) {
+                $catalogApp = $catalogApps[$appId]
+                [pscustomobject]@{
+                    name = $catalogApp.name
+                    packageId = $catalogApp.packageId
+                    wingetId = if ($catalogApp.wingetId) { $catalogApp.wingetId } else { $catalogApp.packageId }
+                    chocoId = if ($catalogApp.chocoId) { $catalogApp.chocoId } else { $catalogApp.packageId }
+                }
+            }
+            else {
+                [pscustomobject]@{
+                    name = $appId
+                    packageId = $appId
+                    wingetId = $appId
+                    chocoId = $appId
+                }
+            }
+        }
+
+        Install-Applications -Packages $installSpecs -PreferredPM $global:AppState.PreferredPM
         Write-Host "[SUCCESS] Headless install completed" -ForegroundColor Green
     }
     catch {

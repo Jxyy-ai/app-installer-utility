@@ -1,7 +1,7 @@
 <#
 .SYNOPSIS
   Configuration management for the app installer utility.
-  Handles INI preference storage, OFFLINE_MODE detection, and package manager availability checks.
+  Handles INI preference storage and package manager availability checks.
 #>
 
 $ConfigPath = "$env:LOCALAPPDATA\AppInstallerUtility\config.ini"
@@ -69,7 +69,11 @@ function Set-ConfigValue {
 #>
 function Get-PreferredPackageManager {
     $stored = Get-ConfigValue -Key 'PreferredPM' -Default 'winget'
-    return if ($stored -in @('winget', 'chocolatey')) { $stored } else { 'winget' }
+    if ($stored -in @('winget', 'chocolatey')) {
+        return $stored
+    }
+
+    return 'winget'
 }
 
 <#
@@ -113,14 +117,6 @@ function Test-ChocolateyAvailable {
     catch {
         return $false
     }
-}
-
-<#
-.SYNOPSIS
-  Check if offline mode is enabled via environment variable or config.
-#>
-function Get-OfflineMode {
-    return $env:OFFLINE_MODE -eq '1' -or (Get-ConfigValue -Key 'OfflineMode') -eq 'true'
 }
 
 <#

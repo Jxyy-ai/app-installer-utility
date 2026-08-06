@@ -4,6 +4,9 @@
   Handles event binding, state updates, and user interactions.
 #>
 
+Add-Type -AssemblyName PresentationFramework
+Add-Type -AssemblyName WindowsBase
+
 # Load XAML
 [xml]$xaml = Get-Content "$PSScriptRoot\MainWindow.xaml" -Raw
 
@@ -25,6 +28,7 @@ else {
 $searchBox = $window.FindName('SearchBox')
 $appGrid = $window.FindName('AppGrid')
 $installButton = $window.FindName('InstallButton')
+$uninstallButton = $window.FindName('UninstallButton')
 $pmWinget = $window.FindName('PMWinget')
 $pmChocolatey = $window.FindName('PMChocolatey')
 $busyOverlay = $window.FindName('BusyOverlay')
@@ -54,7 +58,8 @@ function Populate-AppGrid {
     $allApps = @()
     foreach ($category in $catalog.categories) {
         foreach ($app in $category.apps) {
-            $allApps += @{
+            $allApps += [pscustomobject]@{
+                isSelected = $false
                 name = $app.name
                 description = $app.description
                 packageId = $app.packageId
@@ -73,7 +78,37 @@ function Populate-AppGrid {
     }
     
     $global:AppState.VisibleApps = $allApps
-    $appGrid.ItemsSource = [System.Collections.ObjectModel.ObservableCollection[object]]($allApps)
+    $appCollection = [System.Collections.ObjectModel.ObservableCollection[object]]::new()
+    foreach ($app in $allApps) {
+        [void]$appCollection.Add($app)
+    }
+    $appGrid.ItemsSource = $appCollection
+    $appGrid.UpdateLayout()
+}
+
+function Get-SelectedAppSpecs {
+    # Commit any checkbox edits before reading bound values.
+    $focusedElement = [System.Windows.Input.Keyboard]::FocusedElement
+    if ($focusedElement -and $focusedElement.GetType().GetMethod('GetBindingExpression')) {
+        $bindingExpression = $focusedElement.GetBindingExpression([System.Windows.Controls.Primitives.ToggleButton]::IsCheckedProperty)
+        if ($bindingExpression) {
+            $bindingExpression.UpdateSource()
+        }
+    }
+
+    $selectedApps = @()
+    foreach ($item in $appGrid.Items) {
+        if ($item.isSelected) {
+            $selectedApps += [pscustomobject]@{
+                name = $item.name
+                packageId = $item.packageId
+                wingetId = if ($item.wingetId) { $item.wingetId } else { $item.packageId }
+                chocoId = if ($item.chocoId) { $item.chocoId } else { $item.packageId }
+            }
+        }
+    }
+
+    return $selectedApps
 }
 
 # Navigation click handlers
@@ -129,22 +164,7 @@ $installButton.Add_Click({
         return
     }
     
-    if ($global:AppState.OfflineMode) {
-        [System.Windows.MessageBox]::Show('OFFLINE_MODE is enabled. Cannot install packages.', 'Offline Mode', 'OK', 'Warning') | Out-Null
-        return
-    }
-    
-    # Collect checked apps
-    $selectedApps = @()
-    foreach ($item in $appGrid.Items) {
-        $container = $appGrid.ItemContainerGenerator.ContainerFromItem($item)
-        if ($container) {
-            $cb = $container.FindName('AppCheckbox')
-            if ($cb -and $cb.IsChecked) {
-                $selectedApps += $item.packageId
-            }
-        }
-    }
+    $selectedApps = Get-SelectedAppSpecs
     
     if ($selectedApps.Count -eq 0) {
         [System.Windows.MessageBox]::Show('Please select at least one app to install', 'No Selection', 'OK', 'Warning') | Out-Null
@@ -158,13 +178,13 @@ $installButton.Add_Click({
     
     # Run installation in background worker
     $job = Start-Job -ScriptBlock {
-        param($PackageIds, $PreferredPM, $StateScript, $ConfigScript, $InstallerScript)
+        param($Packages, $PreferredPM, $StateScript, $ConfigScript, $InstallerScript)
         
         . $StateScript
         . $ConfigScript
         . $InstallerScript
         
-        Install-Applications -PackageIds $PackageIds -PreferredPM $PreferredPM
+        Install-Applications -Packages $Packages -PreferredPM $PreferredPM
     } -ArgumentList @($selectedApps, $global:AppState.PreferredPM, "$PSScriptRoot\AppState.ps1", "$PSScriptRoot\Config.ps1", "$PSScriptRoot\Installer.ps1")
     
     # Wait for job completion
@@ -177,6 +197,56 @@ $installButton.Add_Click({
     $installPanel.IsEnabled = $true
     
     [System.Windows.MessageBox]::Show('Installation complete. Check transcript log for details.', 'Success', 'OK', 'Information') | Out-Null
+})
+
+# Uninstall button click handler
+$uninstallButton.Add_Click({
+    if ($global:AppState.IsInstalling) {
+        [System.Windows.MessageBox]::Show('Operation already in progress', 'Info', 'OK', 'Information') | Out-Null
+        return
+    }
+
+    $selectedApps = Get-SelectedAppSpecs
+
+    if ($selectedApps.Count -eq 0) {
+        [System.Windows.MessageBox]::Show('Please select at least one app to uninstall', 'No Selection', 'OK', 'Warning') | Out-Null
+        return
+    }
+
+    $appNames = ($selectedApps | ForEach-Object { $_.name }) -join "`r`n"
+    $confirm = [System.Windows.MessageBox]::Show(
+        "Uninstall the selected application(s)?`r`n`r`n$appNames",
+        'Confirm Uninstall',
+        'YesNo',
+        'Warning'
+    )
+
+    if ($confirm -ne [System.Windows.MessageBoxResult]::Yes) {
+        return
+    }
+
+    $busyOverlay.Visibility = [System.Windows.Visibility]::Visible
+    $busyText.Text = "Uninstalling $($selectedApps.Count) application(s)..."
+    $installPanel.IsEnabled = $false
+
+    $job = Start-Job -ScriptBlock {
+        param($Packages, $PreferredPM, $StateScript, $ConfigScript, $InstallerScript)
+
+        . $StateScript
+        . $ConfigScript
+        . $InstallerScript
+
+        Uninstall-Applications -Packages $Packages -PreferredPM $PreferredPM
+    } -ArgumentList @($selectedApps, $global:AppState.PreferredPM, "$PSScriptRoot\AppState.ps1", "$PSScriptRoot\Config.ps1", "$PSScriptRoot\Installer.ps1")
+
+    $job | Wait-Job | Out-Null
+    $output = $job | Receive-Job
+    $job | Remove-Job
+
+    $busyOverlay.Visibility = [System.Windows.Visibility]::Collapsed
+    $installPanel.IsEnabled = $true
+
+    [System.Windows.MessageBox]::Show('Uninstall complete. Check transcript log for details.', 'Complete', 'OK', 'Information') | Out-Null
 })
 
 # Package manager radio button handlers
@@ -202,15 +272,6 @@ $saveConfigBtn.Add_Click({
     Set-PreferredPackageManager -PM $selectedPM
     [System.Windows.MessageBox]::Show('Preferences saved.', 'Config', 'OK', 'Information') | Out-Null
 })
-
-# Disable install controls if offline mode
-if ($global:AppState.OfflineMode) {
-    $installButton.IsEnabled = $false
-    $pmWinget.IsEnabled = $false
-    $pmChocolatey.IsEnabled = $false
-    $searchBox.IsReadOnly = $true
-    $searchBox.Text = "[OFFLINE MODE ENABLED - Install functionality disabled]"
-}
 
 # Populate initial grid
 Populate-AppGrid

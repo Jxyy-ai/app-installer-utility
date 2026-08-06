@@ -97,18 +97,26 @@ function Install-ViaWinGet {
         Write-Host "[INFO] Installing '$PackageId' via WinGet..." -ForegroundColor Gray
         
         $result = & winget install --id $PackageId --silent --accept-source-agreements --accept-package-agreements 2>&1
+        $resultText = ($result | Out-String).Trim()
         
         if ($LASTEXITCODE -eq 0) {
             Add-InstallLog -Message "$PackageId installed successfully (WinGet)" -Level 'SUCCESS'
             return $true
         }
+        elseif ($resultText -match 'already installed|No available upgrade found|No newer package versions are available') {
+            Add-InstallLog -Message "$PackageId is already installed and up to date (WinGet)" -Level 'SUCCESS'
+            return $true
+        }
         else {
             Add-InstallLog -Message "WinGet install failed for $PackageId (exit code: $LASTEXITCODE)" -Level 'WARN'
+            if ($resultText) {
+                Add-InstallLog -Message "WinGet output for ${PackageId}: $resultText" -Level 'WARN'
+            }
             return $false
         }
     }
     catch {
-        Add-InstallLog -Message "WinGet install error for $PackageId: $_" -Level 'ERROR'
+        Add-InstallLog -Message "WinGet install error for ${PackageId}: $_" -Level 'ERROR'
         return $false
     }
 }
@@ -138,7 +146,104 @@ function Install-ViaChocolatey {
         }
     }
     catch {
-        Add-InstallLog -Message "Chocolatey install error for $PackageId: $_" -Level 'ERROR'
+        Add-InstallLog -Message "Chocolatey install error for ${PackageId}: $_" -Level 'ERROR'
+        return $false
+    }
+}
+
+<#
+.SYNOPSIS
+  Uninstall single application via WinGet.
+#>
+function Uninstall-ViaWinGet {
+    param(
+        [Parameter(Mandatory)]
+        [string]$PackageId
+    )
+
+    try {
+        Write-Host "[INFO] Uninstalling '$PackageId' via WinGet..." -ForegroundColor Gray
+
+        $result = & winget uninstall --id $PackageId --silent --accept-source-agreements 2>&1
+        $resultText = ($result | Out-String).Trim()
+
+        if ($LASTEXITCODE -eq 0) {
+            Add-InstallLog -Message "$PackageId uninstalled successfully (WinGet)" -Level 'SUCCESS'
+            return $true
+        }
+        elseif ($resultText -match 'No installed package found|No package found|not installed') {
+            Add-InstallLog -Message "$PackageId is not installed (WinGet)" -Level 'SUCCESS'
+            return $true
+        }
+        elseif ($resultText -match 'Multiple versions of this package are installed') {
+            Add-InstallLog -Message "Multiple versions found for $PackageId. Retrying uninstall with --all-versions..." -Level 'WARN'
+
+            $retryResult = & winget uninstall --id $PackageId --all-versions --silent --accept-source-agreements 2>&1
+            $retryText = ($retryResult | Out-String).Trim()
+
+            if ($LASTEXITCODE -eq 0) {
+                Add-InstallLog -Message "$PackageId uninstalled successfully from all versions (WinGet)" -Level 'SUCCESS'
+                return $true
+            }
+            elseif ($retryText -match 'No installed package found|No package found|not installed') {
+                Add-InstallLog -Message "$PackageId is not installed (WinGet)" -Level 'SUCCESS'
+                return $true
+            }
+
+            Add-InstallLog -Message "WinGet uninstall all-versions failed for $PackageId (exit code: $LASTEXITCODE)" -Level 'WARN'
+            if ($retryText) {
+                Add-InstallLog -Message "WinGet output for ${PackageId}: $retryText" -Level 'WARN'
+            }
+            return $false
+        }
+        else {
+            Add-InstallLog -Message "WinGet uninstall failed for $PackageId (exit code: $LASTEXITCODE)" -Level 'WARN'
+            if ($resultText) {
+                Add-InstallLog -Message "WinGet output for ${PackageId}: $resultText" -Level 'WARN'
+            }
+            return $false
+        }
+    }
+    catch {
+        Add-InstallLog -Message "WinGet uninstall error for ${PackageId}: $_" -Level 'ERROR'
+        return $false
+    }
+}
+
+<#
+.SYNOPSIS
+  Uninstall single application via Chocolatey.
+#>
+function Uninstall-ViaChocolatey {
+    param(
+        [Parameter(Mandatory)]
+        [string]$PackageId
+    )
+
+    try {
+        Write-Host "[INFO] Uninstalling '$PackageId' via Chocolatey..." -ForegroundColor Gray
+
+        $result = & choco uninstall $PackageId -y --remove-dependencies 2>&1
+        $resultText = ($result | Out-String).Trim()
+
+        if ($LASTEXITCODE -eq 0) {
+            Add-InstallLog -Message "$PackageId uninstalled successfully (Chocolatey)" -Level 'SUCCESS'
+            return $true
+        }
+        elseif ($resultText -match 'not installed|not found') {
+            Add-InstallLog -Message "$PackageId is not installed (Chocolatey)" -Level 'SUCCESS'
+            return $true
+        }
+        else {
+            Add-InstallLog -Message "Chocolatey uninstall failed for $PackageId (exit code: $LASTEXITCODE)" -Level 'WARN'
+            if ($resultText) {
+                Add-InstallLog -Message "Chocolatey output for ${PackageId}: $resultText" -Level 'WARN'
+            }
+            return $false
+        }
+    }
+    catch {
+        Add-InstallLog -Message "Chocolatey uninstall error for ${PackageId}: $_" -Level 'ERROR'
         return $false
     }
 }
@@ -150,15 +255,15 @@ function Install-ViaChocolatey {
 function Install-Application {
     param(
         [Parameter(Mandatory)]
-        [string]$PackageId,
+        [object]$Package,
         
         [string]$PreferredPM = 'winget'
     )
-    
-    if ($global:AppState.OfflineMode) {
-        Add-InstallLog -Message "OFFLINE_MODE enabled - skipping install for $PackageId" -Level 'WARN'
-        return $false
-    }
+
+    $displayName = if ($Package.name) { $Package.name } else { [string]$Package }
+    $packageId = if ($Package.packageId) { $Package.packageId } else { [string]$Package }
+    $wingetId = if ($Package.wingetId) { $Package.wingetId } else { $packageId }
+    $chocoId = if ($Package.chocoId) { $Package.chocoId } else { $packageId }
     
     # Ensure at least one PM is available
     if (-not $global:AppState.PMAvailable.winget -and -not $global:AppState.PMAvailable.chocolatey) {
@@ -177,27 +282,72 @@ function Install-Application {
     
     # Primary attempt
     if ($PreferredPM -eq 'winget' -and $global:AppState.PMAvailable.winget) {
-        if (Install-ViaWinGet -PackageId $PackageId) {
+        if (Install-ViaWinGet -PackageId $wingetId) {
             return $true
         }
         # Fallback to Chocolatey
         if ($global:AppState.PMAvailable.chocolatey) {
             Add-InstallLog -Message "WinGet failed, attempting fallback to Chocolatey..." -Level 'WARN'
-            return Install-ViaChocolatey -PackageId $PackageId
+            return Install-ViaChocolatey -PackageId $chocoId
         }
     }
     elseif ($PreferredPM -eq 'chocolatey' -and $global:AppState.PMAvailable.chocolatey) {
-        if (Install-ViaChocolatey -PackageId $PackageId) {
+        if (Install-ViaChocolatey -PackageId $chocoId) {
             return $true
         }
         # Fallback to WinGet
         if ($global:AppState.PMAvailable.winget) {
             Add-InstallLog -Message "Chocolatey failed, attempting fallback to WinGet..." -Level 'WARN'
-            return Install-ViaWinGet -PackageId $PackageId
+            return Install-ViaWinGet -PackageId $wingetId
         }
     }
     
-    Add-InstallLog -Message "Failed to install $PackageId - no available package managers" -Level 'ERROR'
+    Add-InstallLog -Message "Failed to install $displayName - no available package managers" -Level 'ERROR'
+    return $false
+}
+
+<#
+.SYNOPSIS
+  Uninstall application with fallback logic: try preferred PM, then fallback.
+#>
+function Uninstall-Application {
+    param(
+        [Parameter(Mandatory)]
+        [object]$Package,
+
+        [string]$PreferredPM = 'winget'
+    )
+
+    $displayName = if ($Package.name) { $Package.name } else { [string]$Package }
+    $packageId = if ($Package.packageId) { $Package.packageId } else { [string]$Package }
+    $wingetId = if ($Package.wingetId) { $Package.wingetId } else { $packageId }
+    $chocoId = if ($Package.chocoId) { $Package.chocoId } else { $packageId }
+
+    if (-not $global:AppState.PMAvailable.winget -and -not $global:AppState.PMAvailable.chocolatey) {
+        Add-InstallLog -Message "Cannot uninstall $displayName - no available package managers" -Level 'ERROR'
+        return $false
+    }
+
+    if ($PreferredPM -eq 'winget' -and $global:AppState.PMAvailable.winget) {
+        if (Uninstall-ViaWinGet -PackageId $wingetId) {
+            return $true
+        }
+        if ($global:AppState.PMAvailable.chocolatey) {
+            Add-InstallLog -Message "WinGet uninstall failed, attempting fallback to Chocolatey..." -Level 'WARN'
+            return Uninstall-ViaChocolatey -PackageId $chocoId
+        }
+    }
+    elseif ($PreferredPM -eq 'chocolatey' -and $global:AppState.PMAvailable.chocolatey) {
+        if (Uninstall-ViaChocolatey -PackageId $chocoId) {
+            return $true
+        }
+        if ($global:AppState.PMAvailable.winget) {
+            Add-InstallLog -Message "Chocolatey uninstall failed, attempting fallback to WinGet..." -Level 'WARN'
+            return Uninstall-ViaWinGet -PackageId $wingetId
+        }
+    }
+
+    Add-InstallLog -Message "Failed to uninstall $displayName - no available package managers" -Level 'ERROR'
     return $false
 }
 
@@ -208,24 +358,19 @@ function Install-Application {
 function Install-Applications {
     param(
         [Parameter(Mandatory)]
-        [array]$PackageIds,
+        [array]$Packages,
         
         [string]$PreferredPM = 'winget'
     )
     
-    if ($global:AppState.OfflineMode) {
-        Add-InstallLog -Message "OFFLINE_MODE enabled - batch install blocked" -Level 'ERROR'
-        return
-    }
-    
     Update-AppState -Property 'IsInstalling' -Value $true
-    Add-InstallLog -Message "Starting batch installation of $($PackageIds.Count) app(s)" -Level 'INFO'
+    Add-InstallLog -Message "Starting batch installation of $($Packages.Count) app(s)" -Level 'INFO'
     
     $successCount = 0
     $failureCount = 0
     
-    foreach ($packageId in $PackageIds) {
-        if (Install-Application -PackageId $packageId -PreferredPM $PreferredPM) {
+    foreach ($package in $Packages) {
+        if (Install-Application -Package $package -PreferredPM $PreferredPM) {
             $successCount++
         }
         else {
@@ -235,5 +380,37 @@ function Install-Applications {
     }
     
     Add-InstallLog -Message "Installation batch complete: $successCount successful, $failureCount failed" -Level 'INFO'
+    Update-AppState -Property 'IsInstalling' -Value $false
+}
+
+<#
+.SYNOPSIS
+  Batch uninstall multiple applications.
+#>
+function Uninstall-Applications {
+    param(
+        [Parameter(Mandatory)]
+        [array]$Packages,
+
+        [string]$PreferredPM = 'winget'
+    )
+
+    Update-AppState -Property 'IsInstalling' -Value $true
+    Add-InstallLog -Message "Starting batch uninstall of $($Packages.Count) app(s)" -Level 'INFO'
+
+    $successCount = 0
+    $failureCount = 0
+
+    foreach ($package in $Packages) {
+        if (Uninstall-Application -Package $package -PreferredPM $PreferredPM) {
+            $successCount++
+        }
+        else {
+            $failureCount++
+        }
+        Start-Sleep -Milliseconds 500
+    }
+
+    Add-InstallLog -Message "Uninstall batch complete: $successCount successful, $failureCount failed" -Level 'INFO'
     Update-AppState -Property 'IsInstalling' -Value $false
 }

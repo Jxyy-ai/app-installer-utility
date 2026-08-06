@@ -8,7 +8,6 @@ $global:AppState = @{
     Apps                = @{}      # Package ID -> App metadata
     SelectedApps        = @()      # Array of selected package IDs
     IsInstalling        = $false   # Installation in progress flag
-    OfflineMode         = $false   # Disable all package manager operations
     PreferredPM         = 'winget' # 'winget' or 'chocolatey'
     InstallLog          = @()      # Log entries from installation
     CurrentFilterText   = ''       # Active search filter
