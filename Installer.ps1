@@ -15,6 +15,11 @@
   Bootstrap WinGet if not available.
 #>
 function Install-WinGet {
+    if (-not ([Security.Principal.WindowsPrincipal][Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole([Security.Principal.WindowsBuiltInRole]::Administrator)) {
+        Add-InstallLog -Message 'Cannot bootstrap WinGet from an unelevated process.' -Level 'ERROR'
+        return $false
+    }
+
     Write-Host "[INFO] Bootstrapping WinGet 1.28.240..." -ForegroundColor Cyan
     
     try {
@@ -55,8 +60,35 @@ function Install-WinGet {
   Bootstrap Chocolatey if not available.
 #>
 function Install-Chocolatey {
+    if (-not ([Security.Principal.WindowsPrincipal][Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole([Security.Principal.WindowsBuiltInRole]::Administrator)) {
+        Add-InstallLog -Message 'Cannot bootstrap Chocolatey from an unelevated process.' -Level 'ERROR'
+        return $false
+    }
+
     Write-Host "[INFO] Bootstrapping Chocolatey 2.7.2..." -ForegroundColor Cyan
-    
+
+    $chocoExe = Join-Path $env:ProgramData 'chocolatey\bin\choco.exe'
+    if (Test-ChocolateyAvailable) {
+        Add-InstallLog -Message "Chocolatey already available, skipping bootstrap" -Level 'INFO'
+        return $true
+    }
+    if (Test-Path $chocoExe) {
+        $chocoDir = Split-Path $chocoExe -Parent
+        if (-not ($env:Path -split ';' | ForEach-Object { $_.Trim() } | Where-Object { $_ -ieq $chocoDir })) {
+            $env:Path = "$($env:Path);$chocoDir"
+        }
+        try {
+            $null = & $chocoExe --version 2>$null
+            if ($?) {
+                Add-InstallLog -Message "Chocolatey executable found on disk; using existing installation" -Level 'INFO'
+                return $true
+            }
+        }
+        catch {
+            Add-InstallLog -Message "Chocolatey executable exists but version check failed; proceeding with bootstrap" -Level 'WARN'
+        }
+    }
+
     try {
         # Official Chocolatey bootstrap script
         $chocoScript = @"
@@ -72,6 +104,10 @@ Set-ExecutionPolicy Bypass -Scope Process -Force; [System.Net.ServicePointManage
             Add-InstallLog -Message "Chocolatey bootstrapped successfully" -Level 'SUCCESS'
             return $true
         }
+        elseif (Test-Path $chocoExe) {
+            Add-InstallLog -Message "Chocolatey bootstrap script detected an existing installation; using existing Chocolatey" -Level 'INFO'
+            return $true
+        }
         else {
             Add-InstallLog -Message "Chocolatey bootstrap failed - package manager unavailable" -Level 'ERROR'
             return $false
@@ -79,7 +115,34 @@ Set-ExecutionPolicy Bypass -Scope Process -Force; [System.Net.ServicePointManage
     }
     catch {
         Add-InstallLog -Message "Chocolatey bootstrap error: $_" -Level 'ERROR'
+        if (Test-ChocolateyAvailable) {
+            Add-InstallLog -Message "Chocolatey is available after bootstrap error; using existing installation" -Level 'INFO'
+            return $true
+        }
+        elseif (Test-Path $chocoExe) {
+            Add-InstallLog -Message "Chocolatey executable exists after bootstrap error; using existing installation" -Level 'INFO'
+            return $true
+        }
         return $false
+    }
+}
+
+function Cleanup-InstallerArtifacts {
+    $paths = @(
+        "$env:TEMP\winget-cli.msixbundle",
+        "$env:ProgramData\chocolatey\backup"
+    )
+
+    foreach ($path in $paths) {
+        try {
+            if (Test-Path $path) {
+                Remove-Item -Path $path -Recurse -Force -ErrorAction Stop
+                Add-InstallLog -Message "Removed installer artifact: $path" -Level 'INFO'
+            }
+        }
+        catch {
+            Add-InstallLog -Message "Failed to remove installer artifact ${path}: $_" -Level 'WARN'
+        }
     }
 }
 
@@ -164,7 +227,7 @@ function Uninstall-ViaWinGet {
     try {
         Write-Host "[INFO] Uninstalling '$PackageId' via WinGet..." -ForegroundColor Gray
 
-        $result = & winget uninstall --id $PackageId --silent --accept-source-agreements 2>&1
+        $result = & winget uninstall --id $PackageId --exact --silent --accept-source-agreements 2>&1
         $resultText = ($result | Out-String).Trim()
 
         if ($LASTEXITCODE -eq 0) {
@@ -178,7 +241,7 @@ function Uninstall-ViaWinGet {
         elseif ($resultText -match 'Multiple versions of this package are installed') {
             Add-InstallLog -Message "Multiple versions found for $PackageId. Retrying uninstall with --all-versions..." -Level 'WARN'
 
-            $retryResult = & winget uninstall --id $PackageId --all-versions --silent --accept-source-agreements 2>&1
+            $retryResult = & winget uninstall --id $PackageId --exact --all-versions --silent --accept-source-agreements 2>&1
             $retryText = ($retryResult | Out-String).Trim()
 
             if ($LASTEXITCODE -eq 0) {
@@ -196,13 +259,47 @@ function Uninstall-ViaWinGet {
             }
             return $false
         }
+        elseif ($resultText -match 'Unknown option|unrecognized option|invalid argument|unexpected token') {
+            Add-InstallLog -Message "WinGet uninstall flags not accepted for $PackageId; retrying without --silent..." -Level 'WARN'
+            $result = & winget uninstall --id $PackageId --exact --accept-source-agreements 2>&1
+            $resultText = ($result | Out-String).Trim()
+
+            if ($LASTEXITCODE -eq 0) {
+                Add-InstallLog -Message "$PackageId uninstalled successfully (WinGet, non-silent)" -Level 'SUCCESS'
+                return $true
+            }
+            elseif ($resultText -match 'No installed package found|No package found|not installed') {
+                Add-InstallLog -Message "$PackageId is not installed (WinGet)" -Level 'SUCCESS'
+                return $true
+            }
+        }
         else {
             Add-InstallLog -Message "WinGet uninstall failed for $PackageId (exit code: $LASTEXITCODE)" -Level 'WARN'
             if ($resultText) {
                 Add-InstallLog -Message "WinGet output for ${PackageId}: $resultText" -Level 'WARN'
             }
-            return $false
         }
+
+        if ($resultText -match 'Uninstall failed with exit code: 1603|Error 1603') {
+            Add-InstallLog -Message "Retrying WinGet uninstall for $PackageId with --all-versions after 1603 failure..." -Level 'WARN'
+            $retryResult = & winget uninstall --id $PackageId --exact --all-versions --silent --accept-source-agreements 2>&1
+            $retryText = ($retryResult | Out-String).Trim()
+
+            if ($LASTEXITCODE -eq 0) {
+                Add-InstallLog -Message "$PackageId uninstalled successfully from all versions (WinGet)" -Level 'SUCCESS'
+                return $true
+            }
+            elseif ($retryText -match 'No installed package found|No package found|not installed') {
+                Add-InstallLog -Message "$PackageId is not installed (WinGet)" -Level 'SUCCESS'
+                return $true
+            }
+
+            Add-InstallLog -Message "WinGet uninstall retry failed for $PackageId (exit code: $LASTEXITCODE)" -Level 'WARN'
+            if ($retryText) {
+                Add-InstallLog -Message "WinGet retry output for ${PackageId}: $retryText" -Level 'WARN'
+            }
+        }
+        return $false
     }
     catch {
         Add-InstallLog -Message "WinGet uninstall error for ${PackageId}: $_" -Level 'ERROR'
@@ -248,6 +345,50 @@ function Uninstall-ViaChocolatey {
     }
 }
 
+function Ensure-FallbackPackageManager {
+    param(
+        [Parameter(Mandatory)]
+        [ValidateSet('winget','chocolatey')]
+        [string]$PreferredPM
+    )
+
+    if ($PreferredPM -eq 'winget') {
+        if (-not $global:AppState.PMAvailable.chocolatey) {
+            Add-InstallLog -Message 'Fallback package manager Chocolatey is missing; attempting bootstrap...' -Level 'WARN'
+            if ((Test-IsAdministrator) -and (Install-Chocolatey)) {
+                Update-PMAvailability
+                return $true
+            }
+            elseif (-not (Test-IsAdministrator)) {
+                Add-InstallLog -Message 'Cannot bootstrap Chocolatey from unelevated process during fallback.' -Level 'ERROR'
+            }
+        }
+    }
+    else {
+        if (-not $global:AppState.PMAvailable.winget) {
+            Add-InstallLog -Message 'Fallback package manager WinGet is missing; attempting bootstrap...' -Level 'WARN'
+            if ((Test-IsAdministrator) -and (Install-WinGet)) {
+                Update-PMAvailability
+                return $true
+            }
+            elseif (-not (Test-IsAdministrator)) {
+                Add-InstallLog -Message 'Cannot bootstrap WinGet from unelevated process during fallback.' -Level 'ERROR'
+            }
+        }
+    }
+
+    return $false
+}
+
+function Test-UsablePackageId {
+    param(
+        [AllowEmptyString()]
+        [string]$PackageId
+    )
+
+    return -not [string]::IsNullOrWhiteSpace($PackageId)
+}
+
 <#
 .SYNOPSIS
   Install application with fallback logic: try preferred PM, then fallback.
@@ -261,48 +402,69 @@ function Install-Application {
     )
 
     $displayName = if ($Package.name) { $Package.name } else { [string]$Package }
-    $packageId = if ($Package.packageId) { $Package.packageId } else { [string]$Package }
-    $wingetId = if ($Package.wingetId) { $Package.wingetId } else { $packageId }
-    $chocoId = if ($Package.chocoId) { $Package.chocoId } else { $packageId }
+    $packageId = if ($Package -is [string]) {
+        [string]$Package
+    }
+    elseif ($Package.PSObject.Properties['packageId'] -and $Package.packageId) {
+        [string]$Package.packageId
+    }
+    else {
+        ''
+    }
+    $wingetId = if ($Package.wingetId) { [string]$Package.wingetId } elseif (Test-UsablePackageId $packageId) { [string]$packageId } else { '' }
+    $chocoId = if ($Package.chocoId) { [string]$Package.chocoId } elseif (Test-UsablePackageId $packageId) { [string]$packageId } else { '' }
+    $hasWingetId = Test-UsablePackageId $wingetId
+    $hasChocoId = Test-UsablePackageId $chocoId
+
+    if (-not $hasWingetId -and -not $hasChocoId) {
+        Add-InstallLog -Message "Cannot install $displayName - no valid WinGet or Chocolatey package ID is configured" -Level 'ERROR'
+        return $false
+    }
     
     # Ensure at least one PM is available
     if (-not $global:AppState.PMAvailable.winget -and -not $global:AppState.PMAvailable.chocolatey) {
         Add-InstallLog -Message "Attempting to bootstrap missing package managers..." -Level 'WARN'
-        
-        if (-not $global:AppState.PMAvailable.winget) {
+        if (-not $global:AppState.PMAvailable.winget -and $hasWingetId) {
             Install-WinGet | Out-Null
             Update-PMAvailability
         }
         
-        if (-not $global:AppState.PMAvailable.chocolatey) {
+        if (-not $global:AppState.PMAvailable.chocolatey -and $hasChocoId) {
             Install-Chocolatey | Out-Null
             Update-PMAvailability
         }
     }
     
     # Primary attempt
-    if ($PreferredPM -eq 'winget' -and $global:AppState.PMAvailable.winget) {
-        if (Install-ViaWinGet -PackageId $wingetId) {
-            return $true
+    if ($PreferredPM -eq 'winget') {
+        if ($hasWingetId -and $global:AppState.PMAvailable.winget) {
+            if (Install-ViaWinGet -PackageId $wingetId) {
+                return $true
+            }
         }
         # Fallback to Chocolatey
-        if ($global:AppState.PMAvailable.chocolatey) {
+        if ($hasChocoId -and $global:AppState.PMAvailable.chocolatey) {
             Add-InstallLog -Message "WinGet failed, attempting fallback to Chocolatey..." -Level 'WARN'
             return Install-ViaChocolatey -PackageId $chocoId
         }
     }
-    elseif ($PreferredPM -eq 'chocolatey' -and $global:AppState.PMAvailable.chocolatey) {
-        if (Install-ViaChocolatey -PackageId $chocoId) {
-            return $true
+    elseif ($PreferredPM -eq 'chocolatey') {
+        if ($hasChocoId -and $global:AppState.PMAvailable.chocolatey) {
+            if (Install-ViaChocolatey -PackageId $chocoId) {
+                return $true
+            }
         }
         # Fallback to WinGet
-        if ($global:AppState.PMAvailable.winget) {
+        if ($hasWingetId -and $global:AppState.PMAvailable.winget) {
             Add-InstallLog -Message "Chocolatey failed, attempting fallback to WinGet..." -Level 'WARN'
             return Install-ViaWinGet -PackageId $wingetId
         }
     }
     
-    Add-InstallLog -Message "Failed to install $displayName - no available package managers" -Level 'ERROR'
+    $configuredManagers = @()
+    if ($hasWingetId) { $configuredManagers += "WinGet '$wingetId'" }
+    if ($hasChocoId) { $configuredManagers += "Chocolatey '$chocoId'" }
+    Add-InstallLog -Message "Failed to install $displayName - no available package manager for $($configuredManagers -join ' or ')" -Level 'ERROR'
     return $false
 }
 
@@ -319,35 +481,75 @@ function Uninstall-Application {
     )
 
     $displayName = if ($Package.name) { $Package.name } else { [string]$Package }
-    $packageId = if ($Package.packageId) { $Package.packageId } else { [string]$Package }
-    $wingetId = if ($Package.wingetId) { $Package.wingetId } else { $packageId }
-    $chocoId = if ($Package.chocoId) { $Package.chocoId } else { $packageId }
+    $packageId = if ($Package -is [string]) {
+        [string]$Package
+    }
+    elseif ($Package.PSObject.Properties['packageId'] -and $Package.packageId) {
+        [string]$Package.packageId
+    }
+    else {
+        ''
+    }
+    $wingetId = if ($Package.wingetId) { [string]$Package.wingetId } elseif (Test-UsablePackageId $packageId) { [string]$packageId } else { '' }
+    $chocoId = if ($Package.chocoId) { [string]$Package.chocoId } elseif (Test-UsablePackageId $packageId) { [string]$packageId } else { '' }
+    $hasWingetId = Test-UsablePackageId $wingetId
+    $hasChocoId = Test-UsablePackageId $chocoId
 
-    if (-not $global:AppState.PMAvailable.winget -and -not $global:AppState.PMAvailable.chocolatey) {
-        Add-InstallLog -Message "Cannot uninstall $displayName - no available package managers" -Level 'ERROR'
+    if (-not $hasWingetId -and -not $hasChocoId) {
+        Add-InstallLog -Message "Cannot uninstall $displayName - no valid WinGet or Chocolatey package ID is configured" -Level 'ERROR'
         return $false
     }
 
-    if ($PreferredPM -eq 'winget' -and $global:AppState.PMAvailable.winget) {
-        if (Uninstall-ViaWinGet -PackageId $wingetId) {
-            return $true
+    if (-not $global:AppState.PMAvailable.winget -and -not $global:AppState.PMAvailable.chocolatey) {
+        Add-InstallLog -Message "Attempting to bootstrap missing package managers before uninstalling $displayName..." -Level 'WARN'
+        if (-not $global:AppState.PMAvailable.winget -and $hasWingetId) {
+            Install-WinGet | Out-Null
+            Update-PMAvailability
         }
-        if ($global:AppState.PMAvailable.chocolatey) {
+        if (-not $global:AppState.PMAvailable.chocolatey -and $hasChocoId) {
+            Install-Chocolatey | Out-Null
+            Update-PMAvailability
+        }
+
+        if (-not $global:AppState.PMAvailable.winget -and -not $global:AppState.PMAvailable.chocolatey) {
+            Add-InstallLog -Message "Cannot uninstall $displayName - no available package manager for the configured package IDs" -Level 'ERROR'
+            return $false
+        }
+    }
+
+    if ($PreferredPM -eq 'winget') {
+        if ($hasWingetId -and $global:AppState.PMAvailable.winget) {
+            if (Uninstall-ViaWinGet -PackageId $wingetId) {
+                return $true
+            }
+        }
+
+        Ensure-FallbackPackageManager -PreferredPM $PreferredPM | Out-Null
+
+        if ($hasChocoId -and $global:AppState.PMAvailable.chocolatey) {
             Add-InstallLog -Message "WinGet uninstall failed, attempting fallback to Chocolatey..." -Level 'WARN'
             return Uninstall-ViaChocolatey -PackageId $chocoId
         }
     }
-    elseif ($PreferredPM -eq 'chocolatey' -and $global:AppState.PMAvailable.chocolatey) {
-        if (Uninstall-ViaChocolatey -PackageId $chocoId) {
-            return $true
+    elseif ($PreferredPM -eq 'chocolatey') {
+        if ($hasChocoId -and $global:AppState.PMAvailable.chocolatey) {
+            if (Uninstall-ViaChocolatey -PackageId $chocoId) {
+                return $true
+            }
         }
-        if ($global:AppState.PMAvailable.winget) {
+
+        Ensure-FallbackPackageManager -PreferredPM $PreferredPM | Out-Null
+
+        if ($hasWingetId -and $global:AppState.PMAvailable.winget) {
             Add-InstallLog -Message "Chocolatey uninstall failed, attempting fallback to WinGet..." -Level 'WARN'
             return Uninstall-ViaWinGet -PackageId $wingetId
         }
     }
 
-    Add-InstallLog -Message "Failed to uninstall $displayName - no available package managers" -Level 'ERROR'
+    $configuredManagers = @()
+    if ($hasWingetId) { $configuredManagers += "WinGet '$wingetId'" }
+    if ($hasChocoId) { $configuredManagers += "Chocolatey '$chocoId'" }
+    Add-InstallLog -Message "Failed to uninstall $displayName - no available package manager for $($configuredManagers -join ' or ')" -Level 'ERROR'
     return $false
 }
 
@@ -380,7 +582,9 @@ function Install-Applications {
     }
     
     Add-InstallLog -Message "Installation batch complete: $successCount successful, $failureCount failed" -Level 'INFO'
+    Cleanup-InstallerArtifacts
     Update-AppState -Property 'IsInstalling' -Value $false
+    return @{ Success = $successCount; Failure = $failureCount }
 }
 
 <#
@@ -412,5 +616,7 @@ function Uninstall-Applications {
     }
 
     Add-InstallLog -Message "Uninstall batch complete: $successCount successful, $failureCount failed" -Level 'INFO'
+    Cleanup-InstallerArtifacts
     Update-AppState -Property 'IsInstalling' -Value $false
+    return @{ Success = $successCount; Failure = $failureCount }
 }

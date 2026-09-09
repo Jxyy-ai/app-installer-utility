@@ -9,6 +9,206 @@
     Foreground="#333333"
     FontFamily="Segoe UI">
     
+    <Window.Resources>
+        <Style x:Key="PrimaryButton" TargetType="Button">
+            <Setter Property="Background" Value="#007ACC" />
+            <Setter Property="Foreground" Value="#FFFFFF" />
+            <Setter Property="BorderBrush" Value="#005A9E" />
+            <Setter Property="BorderThickness" Value="1" />
+            <Setter Property="Padding" Value="12,8" />
+            <Setter Property="FontWeight" Value="Bold" />
+            <Setter Property="Height" Value="38" />
+            <Setter Property="MinWidth" Value="170" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border
+                            x:Name="ButtonBorder"
+                            Background="{TemplateBinding Background}"
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            BorderThickness="{TemplateBinding BorderThickness}"
+                            CornerRadius="8"
+                            SnapsToDevicePixels="True">
+                            <ContentPresenter
+                                HorizontalAlignment="Center"
+                                VerticalAlignment="Center"
+                                Margin="4"
+                                RecognizesAccessKey="True" />
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="ButtonBorder" Property="Background" Value="#0DFFFFFF" />
+                                <Setter TargetName="ButtonBorder" Property="BorderBrush" Value="#004F7F" />
+                            </Trigger>
+                            <Trigger Property="IsPressed" Value="True">
+                                <Setter TargetName="ButtonBorder" Property="Background" Value="#005A9E" />
+                            </Trigger>
+                            <Trigger Property="IsEnabled" Value="False">
+                                <Setter Property="Opacity" Value="0.6" />
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <Style x:Key="DangerButton" TargetType="Button" BasedOn="{StaticResource PrimaryButton}">
+            <Setter Property="Background" Value="#B3261E" />
+            <Setter Property="BorderBrush" Value="#8A1F16" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border
+                            x:Name="ButtonBorder"
+                            Background="{TemplateBinding Background}"
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            BorderThickness="{TemplateBinding BorderThickness}"
+                            CornerRadius="8"
+                            SnapsToDevicePixels="True">
+                            <ContentPresenter
+                                HorizontalAlignment="Center"
+                                VerticalAlignment="Center"
+                                Margin="4"
+                                RecognizesAccessKey="True" />
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="ButtonBorder" Property="Background" Value="#33B3261E" />
+                                <Setter TargetName="ButtonBorder" Property="BorderBrush" Value="#A31D16" />
+                            </Trigger>
+                            <Trigger Property="IsPressed" Value="True">
+                                <Setter TargetName="ButtonBorder" Property="Background" Value="#99231B" />
+                            </Trigger>
+                            <Trigger Property="IsEnabled" Value="False">
+                                <Setter Property="Opacity" Value="0.6" />
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <Style x:Key="TileBorderStyle" TargetType="Border">
+            <Setter Property="CornerRadius" Value="8" />
+            <Setter Property="Background" Value="#F9F9F9" />
+            <Setter Property="BorderBrush" Value="#E0E0E0" />
+            <Setter Property="BorderThickness" Value="1" />
+            <Setter Property="Padding" Value="10" />
+            <Setter Property="Margin" Value="10" />
+            <Style.Triggers>
+                <!-- Hover highlight on the border itself -->
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Background" Value="#ECECEC" />
+                    <Setter Property="BorderBrush" Value="#D0D0D0" />
+                </Trigger>
+                <DataTrigger Binding="{Binding isSelected}" Value="True">
+                    <Setter Property="Background" Value="#ECECEC" />
+                    <Setter Property="BorderBrush" Value="#D0D0D0" />
+                </DataTrigger>
+            </Style.Triggers>
+        </Style>
+
+        <Style x:Key="CategoryHeader" TargetType="TextBlock">
+            <Setter Property="FontSize" Value="13" />
+            <Setter Property="FontWeight" Value="SemiBold" />
+            <Setter Property="Foreground" Value="#333333" />
+            <Setter Property="Margin" Value="0,6,0,6" />
+        </Style>
+
+        <Style x:Key="ClearFiltersButtonStyle" TargetType="Button">
+            <Setter Property="Height" Value="43" />
+            <Setter Property="MinWidth" Value="89" />
+            <Setter Property="Padding" Value="12,0" />
+            <Setter Property="FontSize" Value="13" />
+            <Setter Property="FontWeight" Value="SemiBold" />
+            <Setter Property="Foreground" Value="#263238" />
+            <Setter Property="Background" Value="#FFFFFF" />
+            <Setter Property="BorderBrush" Value="#CBD2DC" />
+            <Setter Property="BorderThickness" Value="1" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border
+                            x:Name="ClearButtonBorder"
+                            Background="{TemplateBinding Background}"
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            BorderThickness="{TemplateBinding BorderThickness}"
+                            CornerRadius="5"
+                            SnapsToDevicePixels="True">
+                            <ContentPresenter
+                                HorizontalAlignment="Center"
+                                VerticalAlignment="Center"
+                                RecognizesAccessKey="True" />
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="ClearButtonBorder" Property="Background" Value="#F4F7FA" />
+                                <Setter TargetName="ClearButtonBorder" Property="BorderBrush" Value="#AEB8C5" />
+                            </Trigger>
+                            <Trigger Property="IsPressed" Value="True">
+                                <Setter TargetName="ClearButtonBorder" Property="Background" Value="#E8EDF3" />
+                            </Trigger>
+                            <Trigger Property="IsEnabled" Value="False">
+                                <Setter Property="Opacity" Value="0.55" />
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <Style x:Key="AppInfoToolTipStyle" TargetType="ToolTip">
+            <Setter Property="Background" Value="#FFFFFF" />
+            <Setter Property="Foreground" Value="#333333" />
+            <Setter Property="BorderBrush" Value="#D6DCE5" />
+            <Setter Property="BorderThickness" Value="1" />
+            <Setter Property="Padding" Value="14,12" />
+            <Setter Property="HasDropShadow" Value="True" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="ToolTip">
+                        <Border
+                            Background="{TemplateBinding Background}"
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            BorderThickness="{TemplateBinding BorderThickness}"
+                            CornerRadius="7"
+                            Padding="{TemplateBinding Padding}"
+                            Opacity="0"
+                            RenderTransformOrigin="0.5,0">
+                            <Border.Effect>
+                                <DropShadowEffect BlurRadius="12" ShadowDepth="3" Opacity="0.2" Color="#334155" />
+                            </Border.Effect>
+                            <Border.RenderTransform>
+                                <TranslateTransform Y="4" />
+                            </Border.RenderTransform>
+                            <ContentPresenter />
+                            <Border.Triggers>
+                                <EventTrigger RoutedEvent="FrameworkElement.Loaded">
+                                    <BeginStoryboard>
+                                        <Storyboard>
+                                            <DoubleAnimation Storyboard.TargetProperty="Opacity" To="1" Duration="0:0:0.16" />
+                                            <DoubleAnimation Storyboard.TargetProperty="RenderTransform.(TranslateTransform.Y)" To="0" Duration="0:0:0.16" />
+                                        </Storyboard>
+                                    </BeginStoryboard>
+                                </EventTrigger>
+                            </Border.Triggers>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <DataTemplate x:Key="AppInfoToolTipTemplate">
+            <StackPanel Width="300">
+                <TextBlock Text="{Binding name}" FontSize="14" FontWeight="Bold" Foreground="#1F2937" TextWrapping="Wrap" />
+                <TextBlock Text="{Binding description}" Margin="0,6,0,9" FontSize="11" Foreground="#4B5563" TextWrapping="Wrap" />
+                <TextBlock Text="{Binding category, StringFormat=Category: {0}}" FontSize="11" Foreground="#007ACC" TextWrapping="Wrap" />
+                <TextBlock Text="{Binding packageId, StringFormat=Package ID: {0}}" Margin="0,3,0,0" FontSize="10" Foreground="#6B7280" TextWrapping="Wrap" />
+                <TextBlock Text="{Binding wingetId, StringFormat=WinGet: winget install --id {0} --exact}" Margin="0,3,0,0" FontSize="10" Foreground="#374151" TextWrapping="Wrap" />
+                <TextBlock Text="{Binding chocoId, StringFormat=Chocolatey: choco install {0} -y}" Margin="0,3,0,0" FontSize="10" Foreground="#374151" TextWrapping="Wrap" />
+            </StackPanel>
+        </DataTemplate>
+    </Window.Resources>
     <Grid>
         <!-- Main content grid -->
         <Grid.ColumnDefinitions>
@@ -65,22 +265,90 @@
             <!-- Install Tab -->
             <Grid x:Name="InstallPanel" Background="#FFFFFF" Visibility="Visible">
                 <Grid.RowDefinitions>
-                    <RowDefinition Height="60" />
+                    <RowDefinition Height="120" />
                     <RowDefinition Height="*" />
-                    <RowDefinition Height="80" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
                 </Grid.RowDefinitions>
 
-                <!-- Search Bar -->
-                <Grid Grid.Row="0" Background="#F0F0F0" Margin="15">
-                    <TextBox
-                        x:Name="SearchBox"
-                        FontSize="14"
-                        Padding="10"
-                        Background="#FFFFFF"
-                        Foreground="#333333"
-                        BorderThickness="1"
-                        BorderBrush="#CCCCCC"
-                        Margin="0" />
+                <!-- Search and filter bar -->
+                <Grid Grid.Row="0" Background="#F7F9FC" Margin="15">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                    </Grid.RowDefinitions>
+
+                    <StackPanel Grid.Row="0" Orientation="Horizontal" VerticalAlignment="Center" Margin="0 0 0 10">
+                        <TextBlock
+                            Text="Browse and filter applications"
+                            FontSize="14"
+                            FontWeight="SemiBold"
+                            Foreground="#1F1F1F" />
+                        <TextBlock
+                            x:Name="ResultsSummary"
+                            Text="Showing 0 apps"
+                            Margin="15 0 0 0"
+                            Foreground="#666666"
+                            FontSize="12"
+                            VerticalAlignment="Center" />
+                    </StackPanel>
+
+                    <Grid Grid.Row="1">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="180" />
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="Auto" />
+                        </Grid.ColumnDefinitions>
+
+                        <TextBox
+                            x:Name="SearchBox"
+                            Grid.Column="0"
+                            FontSize="13"
+                            Padding="10"
+                            Background="#FFFFFF"
+                            Foreground="#333333"
+                            BorderThickness="1"
+                            BorderBrush="#CCCCCC"
+                            VerticalContentAlignment="Center" />
+
+                        <ComboBox
+                            x:Name="CategoryFilter"
+                            Grid.Column="1"
+                            Margin="10 0 0 0"
+                            Padding="8"
+                            FontSize="13"
+                            FontWeight="SemiBold"
+                            VerticalContentAlignment="Center"
+                            BorderThickness="1"
+                            BorderBrush="#CCCCCC" />
+
+                        <Border
+                            Grid.Column="2"
+                            Background="#EAF3FF"
+                            BorderBrush="#C7DBF7"
+                            BorderThickness="1"
+                            CornerRadius="5"
+                            Margin="16 0 0 0"
+                            Padding="12 0"
+                            Height="43"
+                            MinWidth="101">
+                            <TextBlock
+                                x:Name="SelectedCountText"
+                                Text="Selected: 0"
+                                Foreground="#0B5BAA"
+                                FontWeight="SemiBold"
+                                FontSize="13"
+                                VerticalAlignment="Center" />
+                        </Border>
+
+                        <Button
+                            x:Name="ClearFiltersBtn"
+                            Grid.Column="3"
+                            Content="Clear all"
+                            Margin="16 0 0 0"
+                            Style="{StaticResource ClearFiltersButtonStyle}" />
+                    </Grid>
                 </Grid>
 
                 <!-- App Tiles Grid -->
@@ -98,42 +366,199 @@
                             <DataTemplate>
                                 <!-- App Tile -->
                                 <Border
-                                    Width="120"
-                                    Height="140"
-                                    Margin="10"
-                                    Background="#F9F9F9"
-                                    BorderThickness="1"
-                                    BorderBrush="#E0E0E0">
-                                    <StackPanel Margin="10" VerticalAlignment="Center" HorizontalAlignment="Center">
-                                        <!-- Checkbox -->
-                                        <CheckBox
-                                            x:Name="AppCheckbox"
-                                            IsChecked="{Binding isSelected, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                                            HorizontalAlignment="Center"
-                                            Margin="0 0 0 8" />
-                                        <!-- App Name -->
-                                        <TextBlock
-                                            Text="{Binding name}"
-                                            FontWeight="Bold"
-                                            FontSize="11"
-                                            TextAlignment="Center"
-                                            TextWrapping="Wrap"
-                                            Foreground="#333333"
-                                            Margin="0 0 0 4" />
-                                    </StackPanel>
+                                    Style="{StaticResource TileBorderStyle}"
+                                    Width="220"
+                                    Height="72"
+                                    Tag="{Binding}"
+                                    ToolTipService.InitialShowDelay="400"
+                                    ToolTipService.ShowDuration="60000"
+                                    ToolTipService.Placement="Bottom"
+                                    ToolTipService.VerticalOffset="8">
+                                    <Border.ToolTip>
+                                        <ToolTip
+                                            Style="{StaticResource AppInfoToolTipStyle}"
+                                            Content="{Binding}"
+                                            ContentTemplate="{StaticResource AppInfoToolTipTemplate}" />
+                                    </Border.ToolTip>
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="48" />
+                                            <ColumnDefinition Width="*" />
+                                            <ColumnDefinition Width="Auto" />
+                                        </Grid.ColumnDefinitions>
+
+                                        <Border Grid.Column="0" Width="40" Height="40" CornerRadius="6" Background="#FFFFFF" BorderBrush="#DDDDDD" BorderThickness="1" HorizontalAlignment="Center" VerticalAlignment="Center">
+                                            <Image Source="{Binding icon}" Width="28" Height="28" Stretch="Uniform" HorizontalAlignment="Center" VerticalAlignment="Center" />
+                                        </Border>
+
+                                        <StackPanel Grid.Column="1" Margin="10,6" VerticalAlignment="Center">
+                                            <TextBlock Text="{Binding name}" FontWeight="Bold" FontSize="12" Foreground="#333333" />
+                                            <TextBlock Text="{Binding category}" FontSize="11" Foreground="#007ACC" />
+                                        </StackPanel>
+
+                                        <StackPanel Grid.Column="2" Margin="8" VerticalAlignment="Center" Orientation="Horizontal" HorizontalAlignment="Right">
+                                            <!-- Status dot shown when not selected -->
+                                            <Ellipse x:Name="StatusDot" Width="8" Height="8" Fill="#2ECC71" VerticalAlignment="Center" Margin="0,0,8,0">
+                                                <Ellipse.Style>
+                                                    <Style TargetType="Ellipse">
+                                                        <Setter Property="Visibility" Value="Visible" />
+                                                        <Style.Triggers>
+                                                            <DataTrigger Binding="{Binding isSelected}" Value="True">
+                                                                <Setter Property="Visibility" Value="Collapsed" />
+                                                            </DataTrigger>
+                                                        </Style.Triggers>
+                                                    </Style>
+                                                </Ellipse.Style>
+                                            </Ellipse>
+
+                                            <!-- Checkmark overlay shown when selected -->
+                                            <Border x:Name="CheckMark" Width="18" Height="18" Background="#2ECC71" CornerRadius="3" VerticalAlignment="Center" Margin="0,0,0,0" Visibility="Collapsed">
+                                                <TextBlock Text="✔" Foreground="White" FontSize="12" HorizontalAlignment="Center" VerticalAlignment="Center" />
+                                                <Border.Style>
+                                                    <Style TargetType="Border">
+                                                        <Setter Property="Visibility" Value="Collapsed" />
+                                                        <Style.Triggers>
+                                                            <DataTrigger Binding="{Binding isSelected}" Value="True">
+                                                                <Setter Property="Visibility" Value="Visible" />
+                                                            </DataTrigger>
+                                                        </Style.Triggers>
+                                                    </Style>
+                                                </Border.Style>
+                                            </Border>
+                                        </StackPanel>
+
+                                        <!-- Invisible overlay toggle: captures clicks but has no chrome or focus visuals -->
+                                        <ToggleButton Grid.ColumnSpan="3" IsChecked="{Binding isSelected, Mode=TwoWay}" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Focusable="False" Background="Transparent" BorderThickness="0" OverridesDefaultStyle="True" Cursor="Hand">
+                                            <ToggleButton.Template>
+                                                <ControlTemplate TargetType="ToggleButton">
+                                                    <Border x:Name="OverlayBorder" Background="Transparent" />
+                                                    <ControlTemplate.Triggers>
+                                                        <!-- Keep overlay transparent when checked (so border-selected background shows)
+                                                             Hover is handled on the tile Border itself via TileBorderStyle -->
+                                                        <Trigger Property="IsChecked" Value="True">
+                                                            <Setter TargetName="OverlayBorder" Property="Background" Value="#00FFFFFF" />
+                                                        </Trigger>
+                                                    </ControlTemplate.Triggers>
+                                                </ControlTemplate>
+                                            </ToggleButton.Template>
+                                        </ToggleButton>
+                                    </Grid>
                                 </Border>
                             </DataTemplate>
                         </ItemsControl.ItemTemplate>
                     </ItemsControl>
                 </ScrollViewer>
 
+                <!-- Installation progress panel -->
+                <Border
+                    x:Name="OperationProgressPanel"
+                    Grid.Row="2"
+                    Margin="15,0,15,8"
+                    Padding="10,8"
+                    Background="#FFFFFF"
+                    BorderBrush="#C7DBF7"
+                    BorderThickness="1"
+                    CornerRadius="6"
+                    Visibility="Collapsed">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="42" />
+                            <ColumnDefinition Width="230" />
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="Auto" />
+                        </Grid.ColumnDefinitions>
+
+                        <Border
+                            Grid.Column="0"
+                            Width="34"
+                            Height="34"
+                            Background="#FFFFFF"
+                            BorderBrush="#E1E8F0"
+                            BorderThickness="1"
+                            CornerRadius="5"
+                            HorizontalAlignment="Left">
+                            <Image x:Name="OperationAppIcon" Width="25" Height="25" Stretch="Uniform" />
+                        </Border>
+
+                        <StackPanel Grid.Column="1" Margin="10,0,12,0" VerticalAlignment="Center">
+                            <TextBlock x:Name="OperationTitle" FontSize="12" FontWeight="Bold" Foreground="#1F2937" TextTrimming="CharacterEllipsis" />
+                            <TextBlock x:Name="OperationStatus" Margin="0,2,0,0" FontSize="10" Foreground="#78A1C8" Text="Downloading and installing..." TextTrimming="CharacterEllipsis" />
+                        </StackPanel>
+
+                        <ProgressBar
+                            x:Name="OperationProgressBar"
+                            Grid.Column="2"
+                            Height="6"
+                            Margin="0,0,12,0"
+                            VerticalAlignment="Center"
+                            IsIndeterminate="True"
+                            Minimum="0"
+                            Maximum="100"
+                            Foreground="#087FEA"
+                            Background="#DCE8F5" />
+
+                        <TextBlock
+                            x:Name="OperationPercentage"
+                            Grid.Column="3"
+                            Margin="0,0,18,0"
+                            VerticalAlignment="Center"
+                            FontSize="10"
+                            Foreground="#55708D"
+                            Visibility="Collapsed" />
+
+                        <StackPanel Grid.Column="4" Orientation="Horizontal" VerticalAlignment="Center">
+                            <TextBlock
+                                x:Name="OperationHint"
+                                Text="This may take a few minutes..."
+                                Margin="0,0,16,0"
+                                VerticalAlignment="Center"
+                                FontSize="10"
+                                Foreground="#7890A8" />
+                            <Ellipse Width="10" Height="10" Fill="#087FEA" VerticalAlignment="Center" Margin="0,0,16,0">
+                                <Ellipse.RenderTransform>
+                                    <RotateTransform Angle="0" CenterX="5" CenterY="5" />
+                                </Ellipse.RenderTransform>
+                                <Ellipse.Style>
+                                    <Style TargetType="Ellipse">
+                                        <Style.Triggers>
+                                            <DataTrigger Binding="{Binding ElementName=OperationProgressPanel, Path=Visibility}" Value="Visible">
+                                                <DataTrigger.EnterActions>
+                                                    <BeginStoryboard>
+                                                        <Storyboard RepeatBehavior="Forever">
+                                                            <DoubleAnimation Storyboard.TargetProperty="RenderTransform.Angle" From="0" To="360" Duration="0:0:1.1" />
+                                                        </Storyboard>
+                                                    </BeginStoryboard>
+                                                </DataTrigger.EnterActions>
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </Ellipse.Style>
+                            </Ellipse>
+                            <Button
+                                x:Name="CancelOperationButton"
+                                Content="✕"
+                                Width="24"
+                                Height="24"
+                                Padding="0"
+                                FontSize="12"
+                                Foreground="#7890A8"
+                                Background="Transparent"
+                                BorderThickness="0"
+                                ToolTip="Cancel operation" />
+                        </StackPanel>
+                    </Grid>
+                </Border>
+
                 <!-- Action Bar -->
-                <Grid Grid.Row="2" Background="#ECECEC" Margin="15">
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="Auto" />
-                        <RowDefinition Height="Auto" />
-                    </Grid.RowDefinitions>
-                    <StackPanel Grid.Row="0" Orientation="Horizontal" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="0 0 0 10">
+                <Border Grid.Row="3" Background="#ECECEC" Margin="15" Padding="10">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="Auto" />
+                        </Grid.ColumnDefinitions>
+
+                        <StackPanel Grid.Column="0" Orientation="Horizontal" VerticalAlignment="Center" Margin="0">
                         <TextBlock Text="Package Manager: " VerticalAlignment="Center" Foreground="#666666" Margin="0 0 10 0" FontSize="12" />
                         <RadioButton
                             x:Name="PMWinget"
@@ -149,26 +574,13 @@
                             VerticalAlignment="Center"
                             Foreground="#333333" />
                     </StackPanel>
-                    <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Right">
-                        <Button
-                            x:Name="UninstallButton"
-                            Content="Uninstall Selected"
-                            Background="#B3261E"
-                            Foreground="#FFFFFF"
-                            Padding="15 10"
-                            FontWeight="Bold"
-                            FontSize="12"
-                            Margin="0 0 10 0" />
-                        <Button
-                            x:Name="InstallButton"
-                            Content="Install / Upgrade Applications"
-                            Background="#007ACC"
-                            Foreground="#FFFFFF"
-                            Padding="15 10"
-                            FontWeight="Bold"
-                            FontSize="12" />
+
+                    <StackPanel Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Center">
+                        <Button x:Name="UninstallButton" Content="Uninstall Selected" Style="{StaticResource DangerButton}" Margin="0 0 10 0" />
+                        <Button x:Name="InstallButton" Content="Install / Upgrade Applications" Style="{StaticResource PrimaryButton}" />
                     </StackPanel>
                 </Grid>
+            </Border>
             </Grid>
 
             <!-- Tweaks Panel (placeholder) -->
@@ -229,34 +641,41 @@
             </Grid>
         </Grid>
 
-        <!-- Busy Overlay -->
-        <Grid
-            x:Name="BusyOverlay"
-            Background="#00000080"
-            Visibility="Collapsed"
-            Panel.ZIndex="1000">
+        <Popup
+            x:Name="AppInfoPopup"
+            AllowsTransparency="True"
+            Placement="Bottom"
+            PopupAnimation="None"
+            StaysOpen="False"
+            HorizontalOffset="0"
+            VerticalOffset="8"
+            Panel.ZIndex="900">
             <Border
-                VerticalAlignment="Center"
-                HorizontalAlignment="Center"
+                x:Name="AppInfoBorder"
+                Width="300"
+                MaxHeight="190"
+                Padding="14,12"
                 Background="#FFFFFF"
-                Padding="30"
-                CornerRadius="8">
+                BorderBrush="#D6DCE5"
+                BorderThickness="1"
+                CornerRadius="7"
+                Opacity="0"
+                RenderTransformOrigin="0.5,0">
+                <Border.Effect>
+                    <DropShadowEffect BlurRadius="12" ShadowDepth="3" Opacity="0.2" Color="#334155" />
+                </Border.Effect>
+                <Border.RenderTransform>
+                    <TranslateTransform Y="6" />
+                </Border.RenderTransform>
                 <StackPanel>
-                <ProgressBar
-                    Width="200"
-                    Height="4"
-                    IsIndeterminate="True"
-                    Background="#E0E0E0"
-                    Foreground="#007ACC"
-                    Margin="0 0 0 15" />
-                <TextBlock
-                    x:Name="BusyText"
-                    Text="Installing applications..."
-                    HorizontalAlignment="Center"
-                    Foreground="#333333"
-                    FontSize="14" />
+                    <TextBlock x:Name="AppInfoName" FontSize="14" FontWeight="Bold" Foreground="#1F2937" TextWrapping="Wrap" />
+                    <TextBlock x:Name="AppInfoDescription" Margin="0,5,0,9" FontSize="11" Foreground="#4B5563" TextWrapping="Wrap" />
+                    <TextBlock x:Name="AppInfoCategory" FontSize="11" Foreground="#007ACC" TextWrapping="Wrap" />
+                    <TextBlock x:Name="AppInfoPackage" Margin="0,3,0,0" FontSize="10" Foreground="#6B7280" TextWrapping="Wrap" />
+                    <TextBlock x:Name="AppInfoCommand" Margin="0,3,0,0" FontSize="10" Foreground="#374151" TextWrapping="Wrap" />
                 </StackPanel>
             </Border>
-        </Grid>
+        </Popup>
+
     </Grid>
 </Window>

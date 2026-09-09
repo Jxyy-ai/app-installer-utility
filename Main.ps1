@@ -33,8 +33,9 @@ $HeadlessConfigPath = $ConfigPath
 $ErrorActionPreference = 'Stop'
 $PSDefaultParameterValues['*:ErrorAction'] = 'Stop'
 
-# Ensure admin elevation
-if (-not ([Security.Principal.WindowsPrincipal][Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole([Security.Principal.WindowsBuiltInRole]::Administrator)) {
+# Headless package operations require elevation. The interactive UI must stay in
+# the user's security context so WinGet can remove user-scope packages.
+if ($ConfigPath -and -not ([Security.Principal.WindowsPrincipal][Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole([Security.Principal.WindowsBuiltInRole]::Administrator)) {
     Write-Host "[ERROR] This utility requires administrator privileges. Restarting elevated..." -ForegroundColor Red
     $launchArgs = @(
         '-NoProfile'
@@ -58,14 +59,12 @@ $ScriptRoot = Split-Path -Parent $MyInvocation.MyCommand.Path
 . "$ScriptRoot\Config.ps1"
 . "$ScriptRoot\Installer.ps1"
 
-# Initialize state
-$global:AppState = @{
-    Apps = @{}
-    SelectedApps = @()
-    IsInstalling = $false
-    PreferredPM = Get-PreferredPackageManager
-    InstallLog = @()
-}
+# Initialize state while preserving the shared AppState object from AppState.ps1
+$global:AppState.Apps = @{}
+$global:AppState.SelectedApps = @()
+$global:AppState.IsInstalling = $false
+$global:AppState.PreferredPM = Get-PreferredPackageManager
+$global:AppState.InstallLog = @()
 
 Write-Host "[INFO] App Installer Utility initialized" -ForegroundColor Green
 

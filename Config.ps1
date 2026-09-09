@@ -47,7 +47,6 @@ function Set-ConfigValue {
         [Parameter(Mandatory)]
         [string]$Value
     )
-    
     $content = @{}
     if (Test-Path $ConfigPath) {
         Get-Content $ConfigPath | ForEach-Object {
@@ -61,6 +60,14 @@ function Set-ConfigValue {
     
     $iniContent = $content.GetEnumerator() | ForEach-Object { "$($_.Key)=$($_.Value)" } | Sort-Object
     $iniContent | Set-Content $ConfigPath -Force
+}
+
+<#
+.SYNOPSIS
+    Check whether current process is running elevated.
+#>
+function Test-IsAdministrator {
+        return ([Security.Principal.WindowsPrincipal][Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole([Security.Principal.WindowsBuiltInRole]::Administrator)
 }
 
 <#
@@ -111,12 +118,36 @@ function Test-WinGetAvailable {
 #>
 function Test-ChocolateyAvailable {
     try {
-        $null = choco --version 2>$null
-        return $?
+        $chocoCommand = Get-Command choco -ErrorAction SilentlyContinue
+        if ($chocoCommand) {
+            $null = choco --version 2>$null
+            if ($?) { return $true }
+        }
     }
     catch {
-        return $false
+        # continue to fallback path detection
     }
+
+    $chocoExe = Join-Path $env:ProgramData 'chocolatey\bin\choco.exe'
+    if (Test-Path $chocoExe) {
+        $chocoDir = Split-Path $chocoExe -Parent
+        if (-not ($env:Path -split ';' | ForEach-Object { $_.Trim() } | Where-Object { $_ -ieq $chocoDir })) {
+            $env:Path = "$($env:Path);$chocoDir"
+        }
+
+        try {
+            $null = & $chocoExe --version 2>$null
+            if ($?) { return $true }
+        }
+        catch {
+            # If the executable exists but fails to return a version, still treat as installed.
+            return $true
+        }
+
+        return $true
+    }
+
+    return $false
 }
 
 <#
@@ -124,6 +155,10 @@ function Test-ChocolateyAvailable {
   Update PM availability state.
 #>
 function Update-PMAvailability {
+    if (-not $global:AppState -or -not $global:AppState.PMAvailable) {
+        return
+    }
+
     $global:AppState.PMAvailable.winget = Test-WinGetAvailable
     $global:AppState.PMAvailable.chocolatey = Test-ChocolateyAvailable
     
@@ -146,4 +181,6 @@ function Start-TranscriptLogging {
 }
 
 Start-TranscriptLogging
-Update-PMAvailability
+if ($global:AppState -and $global:AppState.PMAvailable) {
+    Update-PMAvailability
+}

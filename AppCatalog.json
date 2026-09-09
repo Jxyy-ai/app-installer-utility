@@ -2,7 +2,7 @@
   "metadata": {
     "version": "1.0",
     "lastUpdated": "2026-06-05",
-    "totalApps": 48
+    "totalApps": 103
   },
   "categories": [
     {
@@ -13,58 +13,156 @@
         {
           "packageId": "Microsoft.VisualStudioCode",
           "name": "Visual Studio Code",
-          "description": "Lightweight code editor with extensions",
+          "description": "Visual Studio Code is a lightweight code editor with extensions for writing, debugging, and managing many types of software projects.",
           "wingetId": "Microsoft.VisualStudioCode",
           "chocoId": "vscode"
         },
         {
           "packageId": "Git.Git",
           "name": "Git",
-          "description": "Distributed version control system",
+          "description": "Git is a distributed version control system that helps developers track changes, collaborate, and manage project history.",
           "wingetId": "Git.Git",
           "chocoId": "git"
         },
         {
           "packageId": "JetBrains.IntelliJIDEA.Community",
           "name": "IntelliJ IDEA Community",
-          "description": "Java IDE with advanced code analysis",
+          "description": "IntelliJ IDEA Community is a Java development environment with intelligent code analysis, debugging, and project tools.",
           "wingetId": "JetBrains.IntelliJIDEA.Community",
           "chocoId": "intellijidea-community"
         },
         {
           "packageId": "Python.Python.3.12",
           "name": "Python 3.12",
-          "description": "Python programming language runtime",
+          "description": "Python is a versatile programming language used for automation, web development, data analysis, and scripting.",
           "wingetId": "Python.Python.3.12",
           "chocoId": "python"
         },
         {
           "packageId": "OpenJS.NodeJS.LTS",
           "name": "Node.js LTS",
-          "description": "JavaScript runtime with npm package manager",
+          "description": "Node.js LTS runs JavaScript outside the browser and includes npm for building servers, tools, and modern web applications.",
           "wingetId": "OpenJS.NodeJS.LTS",
           "chocoId": "nodejs-lts"
         },
         {
           "packageId": "Docker.DockerDesktop",
           "name": "Docker Desktop",
-          "description": "Container platform for development",
+          "description": "Docker Desktop lets developers build, run, and manage applications in consistent isolated containers.",
           "wingetId": "Docker.DockerDesktop",
           "chocoId": "docker-desktop"
         },
         {
           "packageId": "HashiCorp.Terraform",
           "name": "Terraform",
-          "description": "Infrastructure as code tool",
+          "description": "Terraform is an infrastructure-as-code tool for safely creating and managing cloud and service environments from configuration files.",
           "wingetId": "HashiCorp.Terraform",
           "chocoId": "terraform"
         },
         {
           "packageId": "GitHub.CLI",
           "name": "GitHub CLI",
-          "description": "GitHub command-line tool",
+          "description": "GitHub CLI brings pull requests, issues, repositories, and other GitHub workflows to the command line.",
           "wingetId": "GitHub.cli",
           "chocoId": "gh"
+        },
+        {
+          "packageId": "GitHub.GitHubDesktop",
+          "name": "GitHub Desktop",
+          "description": "GitHub Desktop is a graphical Git client that makes branching, committing, and synchronizing GitHub projects easier.",
+          "wingetId": "GitHub.GitHubDesktop",
+          "chocoId": "github-desktop"
+        },
+        {
+          "packageId": "Microsoft.VisualStudio.2022.Community",
+          "name": "Visual Studio Community",
+          "description": "Visual Studio Community is a full-featured development environment for building .NET, C++, and other Windows applications.",
+          "wingetId": "Microsoft.VisualStudio.2022.Community",
+          "chocoId": "visualstudio2022community"
+        },
+        {
+          "packageId": "GoLang.Go",
+          "name": "Go",
+          "description": "Go is an open-source programming language designed for fast, reliable software, network services, and command-line tools.",
+          "wingetId": "GoLang.Go",
+          "chocoId": "golang"
+        },
+        {
+          "packageId": "Rustlang.Rustup",
+          "name": "Rust",
+          "description": "Rust provides a memory-safe systems programming language and toolchain for building fast, reliable applications.",
+          "wingetId": "Rustlang.Rustup",
+          "chocoId": "rust"
+        },
+        {
+          "packageId": "Microsoft.DotNet.SDK.8",
+          "name": ".NET 8 SDK",
+          "description": ".NET 8 SDK provides the compilers, libraries, and tools needed to build and run modern .NET applications.",
+          "wingetId": "Microsoft.DotNet.SDK.8",
+          "chocoId": "dotnet-8.0-sdk"
+        },
+        {
+          "packageId": "Postman.Postman",
+          "name": "Postman",
+          "description": "Postman is an API development and testing platform for sending requests, checking responses, and documenting services.",
+          "wingetId": "Postman.Postman",
+          "chocoId": "postman"
+        },
+        {
+          "packageId": "DBeaver.DBeaver.Community",
+          "name": "DBeaver Community",
+          "description": "DBeaver Community is a universal database tool for exploring data, writing SQL, and managing many database systems.",
+          "wingetId": "DBeaver.DBeaver.Community",
+          "chocoId": "dbeaver"
+        },
+        {
+          "packageId": "JetBrains.PyCharm.Community",
+          "name": "PyCharm Community",
+          "description": "PyCharm Community is a Python development environment with code completion, debugging, testing, and project navigation tools.",
+          "wingetId": "JetBrains.PyCharm.Community",
+          "chocoId": "pycharm-community"
+        },
+        {
+          "packageId": "Oracle.VirtualBox",
+          "name": "VirtualBox",
+          "description": "VirtualBox lets users run other operating systems in virtual machines for testing, development, or isolated experimentation.",
+          "wingetId": "Oracle.VirtualBox",
+          "chocoId": "virtualbox"
+        },
+        {
+          "packageId": "Microsoft.AzureCLI",
+          "name": "Azure CLI",
+          "description": "Azure CLI provides command-line tools for creating, deploying, and managing resources in Microsoft Azure.",
+          "wingetId": "Microsoft.AzureCLI",
+          "chocoId": "azure-cli"
+        },
+        {
+          "packageId": "Kubernetes.kubectl",
+          "name": "kubectl",
+          "description": "kubectl is the command-line tool for deploying, inspecting, and managing workloads in Kubernetes clusters.",
+          "wingetId": "Kubernetes.kubectl",
+          "chocoId": "kubernetes-cli"
+        },
+        {
+          "packageId": "Apache.Maven",
+          "name": "Apache Maven",
+          "description": "Apache Maven automates Java project builds, dependency management, testing, and packaging through a standard project model.",
+          "wingetId": "Apache.Maven",
+          "chocoId": "maven"
+        },
+        {
+          "packageId": "Yarn.Yarn",
+          "name": "Yarn",
+          "description": "Yarn is a fast JavaScript package manager that installs dependencies and helps teams manage consistent project builds.",
+          "wingetId": "Yarn.Yarn",
+          "chocoId": "yarn"
+        },
+        {
+          "packageId": "JetBrains.Toolbox",
+          "name": "JetBrains Toolbox",
+          "description": "JetBrains Toolbox is a convenient launcher for installing, updating, and managing JetBrains development tools.",
+          "wingetId": "JetBrains.Toolbox",
+          "chocoId": "jetbrainstoolbox"
         }
       ]
     },
@@ -76,30 +174,58 @@
         {
           "packageId": "Google.Chrome",
           "name": "Google Chrome",
-          "description": "Fast and secure web browser",
+          "description": "Google Chrome is a widely used web browser known for its speed, simplicity, and seamless integration with Google services.",
           "wingetId": "Google.Chrome",
           "chocoId": "googlechrome"
         },
         {
           "packageId": "Mozilla.Firefox",
           "name": "Firefox",
-          "description": "Open-source web browser",
+          "description": "Firefox is an open-source web browser that offers strong customization, privacy controls, and support for modern websites.",
           "wingetId": "Mozilla.Firefox",
           "chocoId": "firefox"
         },
         {
           "packageId": "Microsoft.Edge",
           "name": "Microsoft Edge",
-          "description": "Chromium-based browser with Copilot integration",
+          "description": "Microsoft Edge is a Chromium-based web browser with Microsoft services, productivity features, and Copilot integration.",
           "wingetId": "Microsoft.Edge",
           "chocoId": "microsoft-edge"
         },
         {
           "packageId": "Opera.Opera",
           "name": "Opera",
-          "description": "Browser with built-in VPN and ad blocker",
+          "description": "Opera is a feature-rich web browser with built-in privacy tools, an ad blocker, and convenient sidebar services.",
           "wingetId": "Opera.Opera",
           "chocoId": "opera"
+        },
+        {
+          "packageId": "Brave.Brave",
+          "name": "Brave",
+          "description": "Brave is a privacy-focused Chromium browser that blocks many ads and trackers while remaining compatible with modern websites.",
+          "wingetId": "Brave.Brave",
+          "chocoId": "brave"
+        },
+        {
+          "packageId": "Vivaldi.Vivaldi",
+          "name": "Vivaldi",
+          "description": "Vivaldi is a highly customizable web browser designed for power users who want flexible tabs, shortcuts, and workspace tools.",
+          "wingetId": "Vivaldi.Vivaldi",
+          "chocoId": "vivaldi"
+        },
+        {
+          "packageId": "TorProject.TorBrowser",
+          "name": "Tor Browser",
+          "description": "Tor Browser is designed for anonymous web browsing, utilizing the Tor network to help protect user privacy and security.",
+          "wingetId": "TorProject.TorBrowser",
+          "chocoId": "tor-browser"
+        },
+        {
+          "packageId": "eloston-chromium.Chromium",
+          "name": "Chromium",
+          "description": "Chromium is the open-source browser project that provides a fast, standards-based foundation for web browsing and browser development.",
+          "wingetId": "eloston-chromium.Chromium",
+          "chocoId": "chromium"
         }
       ]
     },
@@ -111,37 +237,93 @@
         {
           "packageId": "Microsoft.Office",
           "name": "Microsoft Office 365",
-          "description": "Complete office productivity suite",
+          "description": "Microsoft Office 365 provides familiar tools for documents, spreadsheets, presentations, email, and everyday business work.",
           "wingetId": "Microsoft.Office",
           "chocoId": "microsoft-office-deployment-tool"
         },
         {
           "packageId": "LibreOffice.LibreOffice",
           "name": "LibreOffice",
-          "description": "Free and open-source office suite",
+          "description": "LibreOffice is a free office suite for creating documents, spreadsheets, presentations, and other productivity files.",
           "wingetId": "LibreOffice.LibreOffice",
           "chocoId": "libreoffice-fresh"
         },
         {
           "packageId": "Obsidian.Obsidian",
           "name": "Obsidian",
-          "description": "Personal knowledge management system",
+          "description": "Obsidian is a personal knowledge management app that connects notes into a searchable network of ideas and references.",
           "wingetId": "Obsidian.Obsidian",
           "chocoId": "obsidian"
         },
         {
           "packageId": "Notion.Notion",
           "name": "Notion",
-          "description": "All-in-one workspace for notes and projects",
+          "description": "Notion is an all-in-one workspace for organizing notes, projects, databases, documents, and team workflows.",
           "wingetId": "Notion.Notion",
           "chocoId": "notion"
         },
         {
           "packageId": "StandardNotes.StandardNotes",
           "name": "Standard Notes",
-          "description": "Encrypted note-taking application",
+          "description": "Standard Notes is an encrypted note-taking application for keeping private thoughts, lists, and information synchronized.",
           "wingetId": "StandardNotes.StandardNotes",
           "chocoId": "standardnotes"
+        },
+        {
+          "packageId": "Microsoft.ToDo",
+          "name": "Microsoft To Do",
+          "description": "Microsoft To Do helps users organize personal tasks, reminders, shopping lists, and daily plans across devices.",
+          "wingetId": "9NBLGGH5R558",
+          "chocoId": "microsoft-todo"
+        },
+        {
+          "packageId": "Doist.Todoist",
+          "name": "Todoist",
+          "description": "Todoist is a task management app for organizing projects, setting priorities, and planning personal or team work.",
+          "wingetId": "Doist.Todoist",
+          "chocoId": "todoist"
+        },
+        {
+          "packageId": "Adobe.Acrobat.Reader.64-bit",
+          "name": "Adobe Acrobat Reader",
+          "description": "Adobe Acrobat Reader lets users view, print, sign, and comment on PDF documents and forms.",
+          "wingetId": "Adobe.Acrobat.Reader.64-bit",
+          "chocoId": "adobereader"
+        },
+        {
+          "packageId": "Foxit.FoxitReader",
+          "name": "Foxit PDF Reader",
+          "description": "Foxit PDF Reader is a fast PDF application with tools for reading, annotating, filling, and reviewing documents.",
+          "wingetId": "Foxit.FoxitReader",
+          "chocoId": "foxitreader"
+        },
+        {
+          "packageId": "Microsoft.PowerBI",
+          "name": "Power BI",
+          "description": "Power BI turns business data into interactive reports and dashboards that help people understand performance and make decisions.",
+          "wingetId": "Microsoft.PowerBI",
+          "chocoId": "powerbi"
+        },
+        {
+          "packageId": "JGraph.Draw",
+          "name": "draw.io",
+          "description": "draw.io is a diagramming tool for creating flowcharts, architecture diagrams, process maps, and technical illustrations.",
+          "wingetId": "JGraph.Draw",
+          "chocoId": "drawio"
+        },
+        {
+          "packageId": "Evernote.Evernote",
+          "name": "Evernote",
+          "description": "Evernote helps users capture notes, documents, web content, and tasks in an organized searchable workspace.",
+          "wingetId": "Evernote.Evernote",
+          "chocoId": "evernote"
+        },
+        {
+          "packageId": "Microsoft.OneDrive",
+          "name": "OneDrive",
+          "description": "OneDrive synchronizes files with Microsoft cloud storage so users can access, share, and protect documents across devices.",
+          "wingetId": "Microsoft.OneDrive",
+          "chocoId": "onedrive"
         }
       ]
     },
@@ -153,37 +335,107 @@
         {
           "packageId": "OBSProject.OBS.Studio",
           "name": "OBS Studio",
-          "description": "Open-source streaming and recording software",
+          "description": "OBS Studio is open-source software for recording video, streaming live content, and creating scenes from multiple sources.",
           "wingetId": "OBSProject.OBSStudio",
           "chocoId": "obs-studio"
         },
         {
           "packageId": "Blackmagic.DaVinciResolve",
           "name": "DaVinci Resolve",
-          "description": "Professional video editing and color correction",
+          "description": "DaVinci Resolve combines professional video editing, visual effects, audio production, and color correction in one application.",
           "wingetId": "Blackmagic.DaVinciResolve",
           "chocoId": "davinci-resolve"
         },
         {
           "packageId": "Audacity.Audacity",
           "name": "Audacity",
-          "description": "Free audio editing software",
+          "description": "Audacity is free audio editing software for recording, cleaning, cutting, mixing, and exporting sound.",
           "wingetId": "Audacity.Audacity",
           "chocoId": "audacity"
         },
         {
           "packageId": "ImageMagick.ImageMagick",
           "name": "ImageMagick",
-          "description": "Command-line image processing tool",
+          "description": "ImageMagick is a powerful command-line tool for converting, resizing, annotating, and processing images in bulk.",
           "wingetId": "ImageMagick.ImageMagick",
           "chocoId": "imagemagick"
         },
         {
           "packageId": "GIMP.GIMP",
           "name": "GIMP",
-          "description": "Free image editor similar to Photoshop",
+          "description": "GIMP is a free image editor for retouching photos, creating artwork, and preparing graphics for digital or print use.",
           "wingetId": "GIMP.GIMP",
           "chocoId": "gimp"
+        },
+        {
+          "packageId": "BlenderFoundation.Blender",
+          "name": "Blender",
+          "description": "Blender is a 3D creation suite for modeling, animation, visual effects, rendering, and interactive content.",
+          "wingetId": "BlenderFoundation.Blender",
+          "chocoId": "blender"
+        },
+        {
+          "packageId": "KDE.Krita",
+          "name": "Krita",
+          "description": "Krita is a digital painting and illustration application with brushes, layers, and tools for creating original artwork.",
+          "wingetId": "KDE.Krita",
+          "chocoId": "krita"
+        },
+        {
+          "packageId": "Spotify.Spotify",
+          "name": "Spotify",
+          "description": "Spotify is a music and podcast streaming service that helps users discover, organize, and enjoy audio content.",
+          "wingetId": "Spotify.Spotify",
+          "chocoId": "spotify"
+        },
+        {
+          "packageId": "Inkscape.Inkscape",
+          "name": "Inkscape",
+          "description": "Inkscape is a vector graphics editor for creating scalable illustrations, logos, icons, diagrams, and layouts.",
+          "wingetId": "Inkscape.Inkscape",
+          "chocoId": "inkscape"
+        },
+        {
+          "packageId": "dotPDN.PaintDotNet",
+          "name": "Paint.NET",
+          "description": "Paint.NET is a straightforward Windows image editor for improving photos, creating graphics, and working with layers.",
+          "wingetId": "dotPDN.PaintDotNet",
+          "chocoId": "paint.net"
+        },
+        {
+          "packageId": "NickeManarin.ScreenToGif",
+          "name": "ScreenToGif",
+          "description": "ScreenToGif lets users record a screen area, webcam, or drawing board and save the result as a GIF or video.",
+          "wingetId": "NickeManarin.ScreenToGif",
+          "chocoId": "screentogif"
+        },
+        {
+          "packageId": "Kdenlive.Kdenlive",
+          "name": "Kdenlive",
+          "description": "Kdenlive is a free video editor for assembling clips, adding effects, mixing audio, and producing finished videos.",
+          "wingetId": "Kdenlive.Kdenlive",
+          "chocoId": "kdenlive"
+        },
+        {
+          "packageId": "clsid2.mpc-hc",
+          "name": "MPC-HC",
+          "description": "MPC-HC is a lightweight open-source media player for playing video and audio files without unnecessary overhead.",
+          "wingetId": "clsid2.mpc-hc",
+          "chocoId": "mpc-hc"
+        },
+        {
+          "packageId": "MusicBrainz.Picard",
+          "name": "MusicBrainz Picard",
+          "description": "MusicBrainz Picard identifies and organizes music files by adding accurate artist, album, track, and artwork metadata.",
+          "wingetId": "MusicBrainz.Picard",
+          "chocoId": "musicbrainz-picard"
+        },
+        {
+          "packageId": "yt-dlp.yt-dlp",
+          "name": "yt-dlp",
+          "description": "yt-dlp is a command-line downloader for saving audio and video from supported online services for personal offline use.",
+          "wingetId": "yt-dlp.yt-dlp",
+          "chocoId": "yt-dlp"
         }
       ]
     },
@@ -195,44 +447,114 @@
         {
           "packageId": "7zip.7zip",
           "name": "7-Zip",
-          "description": "Free file archiver with high compression",
+          "description": "7-Zip is a free file archiver that creates and extracts compressed files with strong compression and encryption support.",
           "wingetId": "7zip.7zip",
           "chocoId": "7zip"
         },
         {
           "packageId": "RARLab.WinRAR",
           "name": "WinRAR",
-          "description": "Powerful file archiver and extractor",
+          "description": "WinRAR is a file archiver for creating, extracting, encrypting, and splitting compressed archives.",
           "wingetId": "RARLab.WinRAR",
           "chocoId": "winrar"
         },
         {
           "packageId": "Ghisler.TotalCommander",
           "name": "Total Commander",
-          "description": "Advanced file manager",
+          "description": "Total Commander is an advanced dual-pane file manager for copying, organizing, comparing, and managing files efficiently.",
           "wingetId": "Ghisler.TotalCommander",
           "chocoId": "totalcommander"
         },
         {
           "packageId": "Microsoft.Sysinternals.Suite",
           "name": "Sysinternals Suite",
-          "description": "Advanced Windows system utilities",
+          "description": "Sysinternals Suite provides expert Windows utilities for inspecting processes, troubleshooting systems, and diagnosing performance issues.",
           "wingetId": "Microsoft.Sysinternals.Suite",
           "chocoId": "sysinternals"
         },
         {
           "packageId": "Piriform.CCleaner",
           "name": "CCleaner",
-          "description": "System cleanup and optimization tool",
+          "description": "CCleaner helps remove temporary files, manage startup items, and perform basic Windows maintenance.",
           "wingetId": "Piriform.CCleaner",
           "chocoId": "ccleaner"
         },
         {
           "packageId": "voidtools.Everything",
           "name": "Everything",
-          "description": "Lightning-fast file search utility",
+          "description": "Everything provides near-instant file and folder searches by indexing Windows file names efficiently.",
           "wingetId": "voidtools.Everything",
           "chocoId": "everything"
+        },
+        {
+          "packageId": "Microsoft.PowerToys",
+          "name": "Microsoft PowerToys",
+          "description": "Microsoft PowerToys adds practical Windows utilities for window layouts, keyboard shortcuts, file tools, and daily productivity.",
+          "wingetId": "Microsoft.PowerToys",
+          "chocoId": "powertoys"
+        },
+        {
+          "packageId": "Rufus.Rufus",
+          "name": "Rufus",
+          "description": "Rufus creates bootable USB drives from ISO images, making it useful for installing or repairing operating systems.",
+          "wingetId": "Rufus.Rufus",
+          "chocoId": "rufus"
+        },
+        {
+          "packageId": "AntibodySoftware.WizTree",
+          "name": "WizTree",
+          "description": "WizTree quickly analyzes disk usage so users can find large files and reclaim storage space.",
+          "wingetId": "AntibodySoftware.WizTree",
+          "chocoId": "wiztree"
+        },
+        {
+          "packageId": "WinSCP.WinSCP",
+          "name": "WinSCP",
+          "description": "WinSCP is a secure file transfer client for copying and synchronizing files over SFTP, SCP, FTP, and WebDAV.",
+          "wingetId": "WinSCP.WinSCP",
+          "chocoId": "winscp"
+        },
+        {
+          "packageId": "PuTTY.PuTTY",
+          "name": "PuTTY",
+          "description": "PuTTY is a lightweight SSH, Telnet, and serial client for securely connecting to remote computers and network devices.",
+          "wingetId": "PuTTY.PuTTY",
+          "chocoId": "putty"
+        },
+        {
+          "packageId": "FileZilla.Client",
+          "name": "FileZilla",
+          "description": "FileZilla is a file transfer client for uploading, downloading, and managing files over FTP, FTPS, and SFTP.",
+          "wingetId": "FileZilla.Client",
+          "chocoId": "filezilla"
+        },
+        {
+          "packageId": "Notepad++.Notepad++",
+          "name": "Notepad++",
+          "description": "Notepad++ is a fast text and source-code editor with syntax highlighting, search tools, and support for many languages.",
+          "wingetId": "Notepad++.Notepad++",
+          "chocoId": "notepadplusplus"
+        },
+        {
+          "packageId": "JAMSoftware.TreeSize.Free",
+          "name": "TreeSize Free",
+          "description": "TreeSize Free scans drives and presents folder sizes clearly so users can identify what is consuming storage.",
+          "wingetId": "JAMSoftware.TreeSize.Free",
+          "chocoId": "treesizefree"
+        },
+        {
+          "packageId": "jqlang.jq",
+          "name": "jq",
+          "description": "jq is a command-line JSON processor for filtering, transforming, querying, and formatting structured data.",
+          "wingetId": "jqlang.jq",
+          "chocoId": "jq"
+        },
+        {
+          "packageId": "cURL.cURL",
+          "name": "cURL",
+          "description": "cURL is a command-line tool for transferring data and testing requests over HTTP, HTTPS, FTP, and other network protocols.",
+          "wingetId": "cURL.cURL",
+          "chocoId": "curl"
         }
       ]
     },
@@ -244,30 +566,65 @@
         {
           "packageId": "Discord.Discord",
           "name": "Discord",
-          "description": "Voice, video, and text communication platform",
+          "description": "Discord is a communication platform for voice calls, video meetings, text chat, communities, and screen sharing.",
           "wingetId": "Discord.Discord",
           "chocoId": "discord"
         },
         {
           "packageId": "Slack.Slack",
           "name": "Slack",
-          "description": "Team messaging and collaboration platform",
+          "description": "Slack is a team collaboration platform that organizes conversations, file sharing, notifications, and work integrations.",
           "wingetId": "Slack.Slack",
           "chocoId": "slack"
         },
         {
           "packageId": "Telegram.TelegramDesktop",
           "name": "Telegram",
-          "description": "Secure messaging application",
+          "description": "Telegram is a cloud-based instant messaging app known for its security features, speed, and simplicity.",
           "wingetId": "Telegram.TelegramDesktop",
           "chocoId": "telegram"
         },
         {
           "packageId": "Microsoft.Teams",
           "name": "Microsoft Teams",
-          "description": "Enterprise communication and collaboration",
+          "description": "Microsoft Teams combines workplace chat, video meetings, file collaboration, and shared team workspaces.",
           "wingetId": "Microsoft.Teams",
           "chocoId": "microsoft-teams"
+        },
+        {
+          "packageId": "Zoom.Zoom",
+          "name": "Zoom",
+          "description": "Zoom is a video meeting and collaboration application for online calls, webinars, screen sharing, and team communication.",
+          "wingetId": "Zoom.Zoom",
+          "chocoId": "zoom"
+        },
+        {
+          "packageId": "OpenWhisperSystems.Signal",
+          "name": "Signal",
+          "description": "Signal is a private messaging and calling application that uses end-to-end encryption to protect conversations.",
+          "wingetId": "OpenWhisperSystems.Signal",
+          "chocoId": "signal"
+        },
+        {
+          "packageId": "Element.Element",
+          "name": "Element",
+          "description": "Element is a secure decentralized messaging client for chat, voice, video, and collaboration through the Matrix network.",
+          "wingetId": "Element.Element",
+          "chocoId": "element-desktop"
+        },
+        {
+          "packageId": "WhatsApp.WhatsApp",
+          "name": "WhatsApp",
+          "description": "WhatsApp is a desktop messaging and calling application for sharing messages, photos, files, and voice or video calls.",
+          "wingetId": "WhatsApp.WhatsApp",
+          "chocoId": "whatsapp"
+        },
+        {
+          "packageId": "Mozilla.Thunderbird",
+          "name": "Thunderbird",
+          "description": "Thunderbird is an open-source desktop client for managing email, calendars, contacts, and multiple accounts.",
+          "wingetId": "Mozilla.Thunderbird",
+          "chocoId": "thunderbird"
         }
       ]
     },
@@ -279,37 +636,65 @@
         {
           "packageId": "Bitwarden.Bitwarden",
           "name": "Bitwarden",
-          "description": "Open-source password manager",
+          "description": "Bitwarden is an open-source password manager that securely stores logins, payment details, notes, and credentials.",
           "wingetId": "Bitwarden.Bitwarden",
           "chocoId": "bitwarden"
         },
         {
-          "packageId": "AgileBits.1Password7",
-          "name": "1Password 7",
-          "description": "Commercial password manager",
-          "wingetId": "AgileBits.1Password7",
+          "packageId": "AgileBits.1Password",
+          "name": "1Password",
+          "description": "1Password is a password manager that securely organizes logins, secrets, payment information, and sensitive notes.",
+          "wingetId": "AgileBits.1Password",
           "chocoId": "1password"
         },
         {
           "packageId": "ProtonVPN.ProtonVPN",
           "name": "ProtonVPN",
-          "description": "VPN client for privacy",
+          "description": "ProtonVPN is a privacy-focused VPN client that encrypts internet traffic and helps protect users on untrusted networks.",
           "wingetId": "ProtonVPN.ProtonVPN",
           "chocoId": "protonvpn"
         },
         {
           "packageId": "IDRIX.VeraCrypt",
           "name": "VeraCrypt",
-          "description": "Free disk encryption software",
+          "description": "VeraCrypt provides strong disk and container encryption for protecting files, drives, and private data.",
           "wingetId": "IDRIX.VeraCrypt",
           "chocoId": "veracrypt"
         },
         {
           "packageId": "DominikReichl.KeePass",
           "name": "KeePass",
-          "description": "Open-source password manager",
+          "description": "KeePass is an open-source password manager that stores credentials in an encrypted local database.",
           "wingetId": "DominikReichl.KeePass",
           "chocoId": "keepass"
+        },
+        {
+          "packageId": "KeePassXCTeam.KeePassXC",
+          "name": "KeePassXC",
+          "description": "KeePassXC is a cross-platform offline password manager for securely storing and organizing account credentials.",
+          "wingetId": "KeePassXCTeam.KeePassXC",
+          "chocoId": "keepassxc"
+        },
+        {
+          "packageId": "Malwarebytes.Malwarebytes",
+          "name": "Malwarebytes",
+          "description": "Malwarebytes detects and removes malware, unwanted software, and other threats that may affect a Windows computer.",
+          "wingetId": "Malwarebytes.Malwarebytes",
+          "chocoId": "malwarebytes"
+        },
+        {
+          "packageId": "WireGuard.WireGuard",
+          "name": "WireGuard",
+          "description": "WireGuard is a modern, fast VPN client for creating secure private network connections with minimal overhead.",
+          "wingetId": "WireGuard.WireGuard",
+          "chocoId": "wireguard"
+        },
+        {
+          "packageId": "OpenVPNTechnologies.OpenVPN",
+          "name": "OpenVPN Connect",
+          "description": "OpenVPN Connect is a VPN client for securely connecting to private networks through OpenVPN profiles.",
+          "wingetId": "OpenVPNTechnologies.OpenVPN",
+          "chocoId": "openvpn"
         }
       ]
     },
@@ -321,37 +706,79 @@
         {
           "packageId": "VideoLAN.VLC",
           "name": "VLC Media Player",
-          "description": "Universal multimedia player",
+          "description": "VLC Media Player plays a wide range of video and audio formats, streams media, and handles content without many extra codecs.",
           "wingetId": "VideoLAN.VLC",
           "chocoId": "vlc"
         },
         {
           "packageId": "qBittorrent.qBittorrent",
           "name": "qBittorrent",
-          "description": "Open-source torrent client",
+          "description": "qBittorrent is an open-source BitTorrent client for downloading and managing torrents with a clean desktop interface.",
           "wingetId": "qBittorrent.qBittorrent",
           "chocoId": "qbittorrent"
         },
         {
           "packageId": "Greenshot.Greenshot",
           "name": "Greenshot",
-          "description": "Screenshot and annotation tool",
+          "description": "Greenshot quickly captures screenshots and provides simple tools for annotating, saving, and sharing them.",
           "wingetId": "Greenshot.Greenshot",
           "chocoId": "greenshot"
         },
         {
           "packageId": "Calibre.Calibre",
           "name": "Calibre",
-          "description": "E-book library management",
+          "description": "Calibre manages e-book libraries, converts formats, edits metadata, and synchronizes books with reading devices.",
           "wingetId": "Calibre.Calibre",
           "chocoId": "calibre"
         },
         {
           "packageId": "HandBrake.HandBrake",
           "name": "HandBrake",
-          "description": "Video transcoder",
+          "description": "HandBrake converts video files between formats and helps optimize them for devices, storage, or sharing.",
           "wingetId": "HandBrake.HandBrake",
           "chocoId": "handbrake"
+        },
+        {
+          "packageId": "ShareX.ShareX",
+          "name": "ShareX",
+          "description": "ShareX captures screens, records activity, uploads files, and automates sharing through many destinations.",
+          "wingetId": "ShareX.ShareX",
+          "chocoId": "sharex"
+        },
+        {
+          "packageId": "Ventoy.Ventoy",
+          "name": "Ventoy",
+          "description": "Ventoy creates a bootable USB drive that can store and launch multiple ISO images without reformatting each time.",
+          "wingetId": "Ventoy.Ventoy",
+          "chocoId": "ventoy"
+        },
+        {
+          "packageId": "Valve.Steam",
+          "name": "Steam",
+          "description": "Steam is a digital game store and gaming platform for purchasing, installing, updating, and playing PC games.",
+          "wingetId": "Valve.Steam",
+          "chocoId": "steam"
+        },
+        {
+          "packageId": "EpicGames.EpicGamesLauncher",
+          "name": "Epic Games Launcher",
+          "description": "Epic Games Launcher is a PC game store and library manager for discovering, installing, and updating games.",
+          "wingetId": "EpicGames.EpicGamesLauncher",
+          "chocoId": "epicgameslauncher"
+        },
+        {
+          "packageId": "GOG.Galaxy",
+          "name": "GOG Galaxy",
+          "description": "GOG Galaxy is a game launcher for managing GOG titles and connecting games from multiple supported libraries.",
+          "wingetId": "GOG.Galaxy",
+          "chocoId": "goggalaxy"
+        },
+        {
+          "packageId": "WinMerge.WinMerge",
+          "name": "WinMerge",
+          "description": "WinMerge compares files and folders visually so users can find differences, review changes, and merge content.",
+          "wingetId": "WinMerge.WinMerge",
+          "chocoId": "winmerge"
         }
       ]
     }

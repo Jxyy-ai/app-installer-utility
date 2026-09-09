@@ -1,11 +1,11 @@
 # App Installer Utility
 
-A Windows desktop utility for one-click and batch software installation from a curated catalog of 48+ applications. Built with PowerShell 7.5, WPF, and integrated with WinGet 1.28.240 and Chocolatey 2.7.2.
+A Windows desktop utility for one-click and batch software installation from a curated catalog of 103 applications. Built with PowerShell 7.5, WPF, and integrated with WinGet 1.28.240 and Chocolatey 2.7.2.
 
 ## Features
 
 ✅ **Curated App Catalog**
-- 8 categories with 48+ hand-picked applications
+- 8 categories with 103 hand-picked applications
 - Organized as selectable tiles with checkboxes
 - Real-time search and filter by name and description
 
@@ -46,6 +46,16 @@ A Windows desktop utility for one-click and batch software installation from a c
 - **Administrator privileges** (required on launch)
 
 ## Installation
+
+### One-line installation
+
+Run this command in PowerShell to download the latest project files and launch the utility:
+
+```powershell
+irm https://jxyy-ai.github.io/app-installer-utility/install.ps1 | iex
+```
+
+The launcher installs the project for the current Windows user under Local Application Data. It does not require a hard-coded local path.
 
 1. Clone or download the repository:
    ```bash
@@ -121,9 +131,9 @@ PreferredPM=winget
 
 - `LOCALAPPDATA`: Standard Windows path for logs and config (auto-detected)
 
-## Supported Applications (48 Total)
+## Supported Applications (103 Total)
 
-### Development (8)
+### Development (22)
 - Visual Studio Code
 - Git
 - IntelliJ IDEA Community
@@ -132,54 +142,115 @@ PreferredPM=winget
 - Docker Desktop
 - Terraform
 - GitHub CLI
+- GitHub Desktop
+- Visual Studio Community
+- Go
+- Rust
+- .NET 8 SDK
+- Postman
+- DBeaver Community
+- PyCharm Community
+- VirtualBox
+- Azure CLI
+- kubectl
+- Apache Maven
+- Yarn
+- JetBrains Toolbox
 
-### Browsers (4)
+### Browsers (8)
 - Google Chrome
 - Firefox
 - Microsoft Edge
 - Opera
+- Brave
+- Vivaldi
+- Tor Browser
+- Chromium
 
-### Productivity (5)
+### Productivity (13)
 - Microsoft Office 365
 - LibreOffice
 - Obsidian
 - Notion
 - Standard Notes
+- Microsoft To Do
+- Todoist
+- Adobe Acrobat Reader
+- Foxit PDF Reader
+- Power BI
+- draw.io
+- Evernote
+- OneDrive
 
-### Media & Design (5)
+### Media & Design (15)
 - OBS Studio
 - DaVinci Resolve
 - Audacity
 - ImageMagick
 - GIMP
+- Blender
+- Krita
+- Spotify
+- Inkscape
+- Paint.NET
+- ScreenToGif
+- Kdenlive
+- MPC-HC
+- MusicBrainz Picard
+- yt-dlp
 
-### System Tools (6)
+### System Tools (16)
 - 7-Zip
 - WinRAR
 - Total Commander
 - Sysinternals Suite
 - CCleaner
 - Everything
+- Microsoft PowerToys
+- Rufus
+- WizTree
+- WinSCP
+- PuTTY
+- FileZilla
+- Notepad++
+- TreeSize Free
+- jq
+- cURL
 
-### Communication (4)
+### Communication (9)
 - Discord
 - Slack
 - Telegram
 - Microsoft Teams
+- Zoom
+- Signal
+- Element
+- WhatsApp
+- Thunderbird
 
-### Security & Privacy (5)
+### Security & Privacy (9)
 - Bitwarden
-- 1Password 7
+- 1Password
 - ProtonVPN
 - VeraCrypt
 - KeePass
+- KeePassXC
+- Malwarebytes
+- WireGuard
+- OpenVPN Connect
 
-### Utilities (5)
+### Utilities (11)
 - VLC Media Player
 - qBittorrent
 - Greenshot
 - Calibre
 - HandBrake
+- ShareX
+- Ventoy
+- Steam
+- Epic Games Launcher
+- GOG Galaxy
+- WinMerge
 
 ## Architecture
 
@@ -252,7 +323,7 @@ PreferredPM=winget
 ## Performance Notes
 
 - Initial app load from JSON catalog: ~100ms
-- Search/filter on 48 apps: <50ms
+- Search/filter on 103 apps: <50ms
 - WinGet bootstrap: ~2-3 minutes (one-time)
 - Chocolatey bootstrap: ~3-5 minutes (one-time)
 - Per-app install time: Varies (typically 30s-5min depending on app size)

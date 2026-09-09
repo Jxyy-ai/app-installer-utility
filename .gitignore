@@ -23,3 +23,8 @@ $RECYCLE.BIN/
 # User files
 .env
 local.*.json
+
+# Build and downloaded archives
+*.zip
+dist/
+release/
