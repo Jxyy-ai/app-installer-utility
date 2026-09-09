@@ -1,0 +1,30 @@
+# PowerShell
+*.log
+*.ps1.log
+transcript.log
+
+# Local config
+config.ini
+
+# Windows
+Thumbs.db
+.DS_Store
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Temp
+*.tmp
+$RECYCLE.BIN/
+
+# User files
+.env
+local.*.json
+
+# Build and downloaded archives
+*.zip
+dist/
+release/
