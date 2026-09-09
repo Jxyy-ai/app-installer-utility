@@ -52,7 +52,7 @@ A Windows desktop utility for one-click and batch software installation from a c
 Run this command in PowerShell to download the latest project files and launch the utility:
 
 ```powershell
-irm https://jxyy-ai.github.io/app-installer-utility/install.ps1 | iex
+irm https://jxyy-ai.github.io/app-installer-utility/Install.ps1 | iex
 ```
 
 The launcher installs the project for the current Windows user under Local Application Data. It does not require a hard-coded local path.
